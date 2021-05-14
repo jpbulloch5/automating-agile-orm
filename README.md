@@ -1,4 +1,4 @@
-# Project 1 - Custom Object Relational Mapping Framework
+# Team e - P1 - Custom Object Relational Mapping Framework
 
 ## Description
 
