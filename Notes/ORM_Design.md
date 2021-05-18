@@ -1,4 +1,4 @@
-#ORM Design
+# ORM Design
 
 ### SQL
 The ORM needs to abstract away all SQL syntax from the user. This means we need a 
