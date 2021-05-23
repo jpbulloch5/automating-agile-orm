@@ -51,7 +51,7 @@ Use annotations to describe a table and columns in a POJO or Repository class.
   - foreignKey=(tablename) - attribute telling ORM that this field is a UUID and points to a
     UUID PK in another table 
   - unique=(true|false) - column values are UNIQUE
-  - nullable=(true|false) - column is NOT NULL 
+  - nonNull=(true|false) - column is NOT NULL 
   - default=(value) set default value for non-null columns. NOT NULL requires default, 
     which makes nullable and unique mutually exclusive
   
