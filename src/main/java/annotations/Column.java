@@ -1,5 +1,7 @@
 package annotations;
 
+import enums.SQLType;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -11,21 +13,15 @@ public @interface Column {
 
     String columnName();
 
-    public enum SQLType {
-        UUID,       //UUID
-        BOOL,       //java boolean - 1 bit
-        INT,        //java int - 4 byte
-        BIGINT,     //java long - 8 byte
-        NUMERIC,    //java float/double with selectable precision
-        VARCHAR    //variable length character string
-    }
-
     //SQL data type the field will map to
-    SQLType type() default SQLType.BOOL;
+    SQLType type();
 
-    boolean unique() default false;
+    //add back in if there's time, not necessary for MVP
+    //boolean unique() default false;
 
     boolean nonNull() default false;
+
+    String defaultValue() default "";
 
     int length() default -1;
 
