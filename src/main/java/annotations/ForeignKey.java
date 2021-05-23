@@ -9,5 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface ForeignKey {
     //Indicates this field is a UUID and should be associated with the UUID PK of named table
-    String targetTable();
+    String referencedTable();
+    String referencedTableID() default "";
 }

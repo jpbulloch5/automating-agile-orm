@@ -1,16 +1,15 @@
 package testjunk;
 
-import utils.Repository;
-import enums.SQLType;
 import annotations.Column;
 import annotations.DefaultValue;
 import annotations.ForeignKey;
 import annotations.Table;
+import enums.SQLType;
+import utils.Repository;
 
 import java.util.UUID;
-
-@Table(tableName = "orm_test")
-public class TestEntity extends Repository {
+@Table(tableName = "orm_test_fk", idColumnName = "fk_id")
+public class TestFKEntity extends Repository{
     @Column(columnName = "orm_string", type = SQLType.VARCHAR)
     private String str;
 
@@ -19,7 +18,7 @@ public class TestEntity extends Repository {
     private int i;
 
     @Column(columnName = "orm_fk", type = SQLType.UUID)
-    //@ForeignKey(targetTable = "orm_table", targetTableIDName = "test_id")
+    @ForeignKey(referencedTable = "orm_test")
     private UUID fk_id;
 
 }
