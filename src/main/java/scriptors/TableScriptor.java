@@ -11,11 +11,18 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableScriptor {
+public abstract class TableScriptor {
+
+    public static String buildQueryStatement(Class <? extends Repository> repo) {
+        return"SELECT * FROM " + repo.getAnnotation(Table.class).tableName();
+    }
+
     public static String buildCreateTableStatement(Class<? extends Repository> repo) throws MalformedTableException {
         if (!repo.isAnnotationPresent(Table.class)) {
             throw new MalformedTableException("Missing @Table annotation.");
         }
+
+
         String tableName = repo.getAnnotation(Table.class).tableName();
 
         String idName;
@@ -43,7 +50,9 @@ public class TableScriptor {
 
                 if(fields[i].getAnnotation(Column.class).nonNull()) {
                     constraints = " NOT NULL";
-                }
+                } /*else if (fields[i].isAnnotationPresent(DefaultValue.class)) {
+                    throw new MalformedTableException("Table cannot be nullable without a default value.")
+                }*/ //Why does nullable require default again? Does it? Leaving this out for now.
 
             } else {
                 throw new MalformedTableException("Field " + fields[i].getName() + " missing @Column annotation.");
