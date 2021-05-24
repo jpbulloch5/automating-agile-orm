@@ -15,16 +15,16 @@ public class TestFKEntityTwo extends Repository{
         super(conn);
     }
 
-    @Column(columnName = "orm_string", type = SQLType.VARCHAR)
-    private String str;
+    @Column(/*columnName = "orm_string", */type = SQLType.VARCHAR)
+    private String test_string_two;
 
-    @Column(columnName = "orm_int", type = SQLType.INT, nonNull = true)
+    @Column(/*columnName = "orm_int", */type = SQLType.INT, nonNull = true)
     @DefaultValue(defaultValue = "1")
-    private int i;
+    private int test_int_two;
 
-    @Column(columnName = "orm_fk", type = SQLType.UUID)
-    @ForeignKey(referencedTable = "orm_test_fk", referencedTableID = "fk_id")
-    private UUID fk_id;
+    @Column(/*columnName = "orm_fk", */type = SQLType.UUID)
+    @ForeignKey(referencedTable = "orm_test_fk")
+    private UUID test_fk_id_two;
 
 
 }

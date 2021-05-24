@@ -5,6 +5,7 @@ import scriptors.TableScriptor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,11 +49,19 @@ public class Repository {
         List<Repository> results = new LinkedList<>();
         while(rs.next())
         {
-            Repository newRepo = repo.newInstance(conn);
+            Repository newRepo = repo.getConstructor(Connection.class).newInstance(conn);
+
+//            Method[] methods = repo.getMethods();
+//            for (Method method : methods) {
+//                //isSetter
+//
+//            }
 
             Field[] fields = repo.getDeclaredFields();
             for (Field field : fields) {
-                field.set(newRepo, rs.getObject(field.getAnnotation(Column.class).columnName()));
+                System.out.println("field: " + field.getName() + " <- " + rs.getObject(field.getName()));
+                field.set(newRepo, rs.getObject(field.getName()));
+
             }
             results.add(newRepo);
         }
