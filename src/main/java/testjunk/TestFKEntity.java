@@ -7,9 +7,14 @@ import annotations.Table;
 import enums.SQLType;
 import utils.Repository;
 
+import java.sql.Connection;
 import java.util.UUID;
 @Table(tableName = "orm_test_fk", idColumnName = "fk_id")
 public class TestFKEntity extends Repository{
+    public TestFKEntity(Connection conn) {
+        super(conn);
+    }
+
     @Column(columnName = "orm_string", type = SQLType.VARCHAR)
     private String str;
 

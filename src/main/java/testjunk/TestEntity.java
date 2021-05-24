@@ -7,10 +7,15 @@ import annotations.DefaultValue;
 import annotations.ForeignKey;
 import annotations.Table;
 
+import java.sql.Connection;
 import java.util.UUID;
 
 @Table(tableName = "orm_test")
 public class TestEntity extends Repository {
+    public TestEntity(Connection conn) {
+        super(conn);
+    }
+
     @Column(columnName = "orm_string", type = SQLType.VARCHAR)
     private String str;
 

@@ -16,11 +16,6 @@ import java.util.Properties;
 public class ConnectionFactory {
     private static ConnectionFactory connectionFactory;
     private static Connection connection;
-    private static String connPropsFilePath;
-
-    static {
-        connPropsFilePath = "src/main/resources/jdbc.properties";
-    }
 
     /**
      * Private constructor. Attempts to establish a connection with database based on parameters
@@ -28,22 +23,22 @@ public class ConnectionFactory {
      * quit() method is invoked. If successful connection object is stored and served
      * by getConnection() method.
      */
-    private ConnectionFactory() throws DBConnectionException{
-        Properties props = new Properties();
-        try (FileReader jdbcPropFile = new FileReader(connPropsFilePath)){
-            props.load(jdbcPropFile);
-            Class.forName(props.getProperty("driver"));
+
+
+    private ConnectionFactory(String host, int port, String db, String schema, String user, String pass, String driver) throws DBConnectionException {
+        try {
+            Class.forName(driver);
             Connection connection = DriverManager.getConnection(
                     "jdbc:postgresql://"
-                            + props.getProperty("host") + ":"
-                            + props.getProperty("port") + "/"
-                            + props.getProperty("dbname")
-                            + "?currentSchema=" + props.getProperty("schemaname"),
-                    props.getProperty("username"),
-                    props.getProperty("password"));
+                            + host + ":"
+                            + port + "/"
+                            + db
+                            + "?currentSchema=" + schema,
+                    user,
+                    pass);
             if (connection == null) {
                 throw new DBConnectionException("Unable to connect to database.");
-            } else { System.out.println("DEBUG: connection established."); }
+            } //else { System.out.println("DEBUG: connection established."); }
             ConnectionFactory.connection = connection;
 
         } catch (Exception e) {
@@ -57,9 +52,11 @@ public class ConnectionFactory {
      * established, invokes private constructor.
      * @return reference to connection object used to access database
      */
-    public static Connection getConnection() throws DBConnectionException {
+
+
+    public static Connection getConnection(String host, int port, String db, String schema, String user, String pass, String driver) throws DBConnectionException {
         if(connectionFactory == null) {
-            connectionFactory = new ConnectionFactory();
+            connectionFactory = new ConnectionFactory(host, port, db, schema, user, pass, driver);
         }
         return connection;
     }
