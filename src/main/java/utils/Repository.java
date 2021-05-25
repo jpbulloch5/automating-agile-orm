@@ -59,9 +59,11 @@ public class Repository {
             for (Field field : fields) {
                 field.setAccessible (true);
                 field.set(newRepo, rs.getObject(field.getAnnotation(Column.class).columnName()));
+                field.setAccessible (false);
 
                 //delete this later
                 System.out.println (field);
+
 
             }
 
