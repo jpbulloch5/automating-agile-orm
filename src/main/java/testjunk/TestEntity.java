@@ -16,15 +16,15 @@ public class TestEntity extends Repository {
         super(conn);
     }
 
-    @Column(columnName = "orm_string", type = SQLType.VARCHAR)
-    private String str;
+    @Column(/*columnName = "orm_string", */type = SQLType.VARCHAR)
+    public String orm_string;
 
-    @Column(columnName = "orm_int", type = SQLType.INT, nonNull = true)
+    @Column(/*columnName = "orm_int", */type = SQLType.INT, nonNull = true)
     @DefaultValue(defaultValue = "1")
-    private int i;
+    public int orm_int;
 
-    @Column(columnName = "orm_fk", type = SQLType.UUID)
+    @Column(/*columnName = "orm_fk", */type = SQLType.UUID)
     //@ForeignKey(targetTable = "orm_table", targetTableIDName = "test_id")
-    private UUID fk_id;
+    public UUID orm_fk;
 
 }

@@ -25,12 +25,12 @@ public abstract class TableScriptor {
 
         String tableName = repo.getAnnotation(Table.class).tableName();
 
-        String idName;
-        if(repo.getAnnotation(Table.class).idColumnName().equals("")) {
-            idName = tableName + "_id";
-        } else {
-            idName = repo.getAnnotation(Table.class).idColumnName();
-        }
+        String idName = tableName + "_id";
+//        if(repo.getAnnotation(Table.class).idColumnName().equals("")) {
+//            idName = tableName + "_id";
+//        } else {
+//            idName = repo.getAnnotation(Table.class).idColumnName();
+//        }
 
         //iterate through annotated fields
         Field[] fields = repo.getDeclaredFields();
@@ -42,7 +42,8 @@ public abstract class TableScriptor {
             String length = "";
             String constraints = "";
             if(fields[i].isAnnotationPresent(Column.class)) {
-                columnName = fields[i].getAnnotation(Column.class).columnName();
+                //columnName = fields[i].getAnnotation(Column.class).columnName();
+                columnName = fields[i].getName();
                 dataType = " " + fields[i].getAnnotation(Column.class).type().toString();
                 if (dataType.equals(" VARCHAR") && fields[i].getAnnotation(Column.class).length() != -1) {
                     length = "(" + fields[i].getAnnotation(Column.class).length() + ")";
@@ -76,12 +77,12 @@ public abstract class TableScriptor {
             //Foreign Keys
             if(fields[i].isAnnotationPresent(ForeignKey.class)) {
                 String referencedTable = fields[i].getAnnotation(ForeignKey.class).referencedTable();
-                String referencedColumnName = "";
-                if(fields[i].getAnnotation(ForeignKey.class).referencedTableID().equals("")) {
-                    referencedColumnName = fields[i].getAnnotation(ForeignKey.class).referencedTable() + "_id";
-                } else {
-                    referencedColumnName = fields[i].getAnnotation(ForeignKey.class).referencedTableID();
-                }
+                String referencedColumnName = fields[i].getAnnotation(ForeignKey.class).referencedTable() + "_id";
+//                if(fields[i].getAnnotation(ForeignKey.class).referencedTableID().equals("")) {
+//                    referencedColumnName = fields[i].getAnnotation(ForeignKey.class).referencedTable() + "_id";
+//                } else {
+//                    referencedColumnName = fields[i].getAnnotation(ForeignKey.class).referencedTableID();
+//                }
 
                 String assembledForeignKeySnippet = "FOREIGN KEY ("
                         + columnName + ")"

@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Column {
 
-    String columnName();
+    //String columnName();
 
     //SQL data type the field will map to
     SQLType type();

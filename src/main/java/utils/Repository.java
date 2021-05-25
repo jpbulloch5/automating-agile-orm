@@ -6,6 +6,7 @@ import scriptors.TableScriptor;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -53,25 +54,22 @@ public class Repository {
         {
             Repository newRepo = repo.getConstructor(Connection.class).newInstance(conn);
 
-
             Field[] fields = repo.getDeclaredFields();
 
             for (Field field : fields) {
+
                 field.setAccessible (true);
-                field.set(newRepo, rs.getObject(field.getAnnotation(Column.class).columnName()));
+                field.set(newRepo, rs.getObject(field.getName()));
                 field.setAccessible (false);
 
                 //delete this later
                 System.out.println (field);
-
 
             }
 
 
             results.add(newRepo);
         }
-
         return results;
-
     }
 }
