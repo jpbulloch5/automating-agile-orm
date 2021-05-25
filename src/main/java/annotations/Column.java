@@ -16,6 +16,8 @@ public @interface Column {
     //SQL data type the field will map to
     SQLType type();
 
+    boolean primaryKey() default false;
+
     //add back in if there's time, not necessary for MVP
     //boolean unique() default false;
 

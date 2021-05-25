@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -36,24 +37,21 @@ public class Driver {
             tableList.put("orm_test_fk", TestFKEntity.class);
             tableList.put("orm_test", TestEntity.class);
 
-<<<<<<< HEAD
-            ///create tables
-            //Initializer.initializeTableList(tableList, conn);
-
-
-
-            List<Repository> queryResults = Repository.query(conn, TestEntity.class);
-=======
             //create tables
-        //    Initializer.initializeTableList(tableList, conn);
+            //Initializer.initializeTableList(tableList, conn);
 
 
          List<Repository> queryResults = Repository.query(conn, TestEntity.class);
 
 
->>>>>>> c01afe1bf22883b636f3dded3cd61aec61b59d48
             for (Repository queryResult : queryResults) {
-                System.out.println("Result: " + queryResult.toString());
+                //System.out.println("Result: " + queryResult.toString());
+                System.out.println("================================================");
+                System.out.println("ID: " + ((TestEntity)queryResult).getOrm_test_id());
+                System.out.println("orm_string: " + ((TestEntity)queryResult).getOrm_string());
+                System.out.println("orm_int: " + ((TestEntity)queryResult).getOrm_int());
+                System.out.println("orm_fk: " + ((TestEntity)queryResult).getOrm_fk());
+                System.out.println("================================================");
             }
 
 

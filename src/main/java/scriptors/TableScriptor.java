@@ -41,14 +41,16 @@ public abstract class TableScriptor {
             String dataType;
             String length = "";
             String constraints = "";
-            if(fields[i].isAnnotationPresent(Column.class)) {
-                //columnName = fields[i].getAnnotation(Column.class).columnName();
+            if(fields[i].isAnnotationPresent(Column.class) && !fields[i].getAnnotation(Column.class).primaryKey()) {//ASSUMING PK FIELD NAME IS EXACTLY TABLE NAME + _id
                 columnName = fields[i].getName();
                 dataType = " " + fields[i].getAnnotation(Column.class).type().toString();
+
+                //Set VARCHAR Length
                 if (dataType.equals(" VARCHAR") && fields[i].getAnnotation(Column.class).length() != -1) {
                     length = "(" + fields[i].getAnnotation(Column.class).length() + ")";
                 }
 
+                //Set NOT NULL Constraint
                 if(fields[i].getAnnotation(Column.class).nonNull()) {
                     constraints = " NOT NULL";
                 } /*else if (fields[i].isAnnotationPresent(DefaultValue.class)) {
@@ -78,11 +80,6 @@ public abstract class TableScriptor {
             if(fields[i].isAnnotationPresent(ForeignKey.class)) {
                 String referencedTable = fields[i].getAnnotation(ForeignKey.class).referencedTable();
                 String referencedColumnName = fields[i].getAnnotation(ForeignKey.class).referencedTable() + "_id";
-//                if(fields[i].getAnnotation(ForeignKey.class).referencedTableID().equals("")) {
-//                    referencedColumnName = fields[i].getAnnotation(ForeignKey.class).referencedTable() + "_id";
-//                } else {
-//                    referencedColumnName = fields[i].getAnnotation(ForeignKey.class).referencedTableID();
-//                }
 
                 String assembledForeignKeySnippet = "FOREIGN KEY ("
                         + columnName + ")"

@@ -26,4 +26,27 @@ public class TestFKEntity extends Repository{
     @ForeignKey(referencedTable = "orm_test")
     private UUID test_fk_id;
 
+    public String getTest_string() {
+        return test_string;
+    }
+
+    public int getTest_int() {
+        return test_int;
+    }
+
+    public UUID getTest_fk_id() {
+        return test_fk_id;
+    }
+
+    public void setTest_string(String test_string) {
+        this.test_string = test_string;
+    }
+
+    public void setTest_int(int test_int) {
+        this.test_int = test_int;
+    }
+
+    public void setTest_fk_id(UUID test_fk_id) {
+        this.test_fk_id = test_fk_id;
+    }
 }
