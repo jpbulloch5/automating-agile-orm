@@ -36,12 +36,22 @@ public class Driver {
             tableList.put("orm_test_fk", TestFKEntity.class);
             tableList.put("orm_test", TestEntity.class);
 
+<<<<<<< HEAD
             ///create tables
             //Initializer.initializeTableList(tableList, conn);
 
 
 
             List<Repository> queryResults = Repository.query(conn, TestEntity.class);
+=======
+            //create tables
+        //    Initializer.initializeTableList(tableList, conn);
+
+
+         List<Repository> queryResults = Repository.query(conn, TestEntity.class);
+
+
+>>>>>>> c01afe1bf22883b636f3dded3cd61aec61b59d48
             for (Repository queryResult : queryResults) {
                 System.out.println("Result: " + queryResult.toString());
             }

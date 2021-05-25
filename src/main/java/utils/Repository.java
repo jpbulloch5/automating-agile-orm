@@ -3,6 +3,7 @@ package utils;
 import annotations.Column;
 import scriptors.TableScriptor;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -16,6 +17,8 @@ import java.util.List;
 
 public class Repository {
     private Connection conn;
+    private Repository newRepo;
+
     public Repository(Connection conn) {
         this.conn = conn;
     }
@@ -51,27 +54,22 @@ public class Repository {
         {
             Repository newRepo = repo.getConstructor(Connection.class).newInstance(conn);
 
-//            Method[] methods = repo.getMethods();
-//            for (Method method : methods) {
-//                //isSetter
-//
-//            }
-
             Field[] fields = repo.getDeclaredFields();
+
             for (Field field : fields) {
-                System.out.println("field: " + field.getName() + " <- " + rs.getObject(field.getName()));
+
+                field.setAccessible (true);
                 field.set(newRepo, rs.getObject(field.getName()));
+                field.setAccessible (false);
+
+                //delete this later
+                System.out.println (field);
 
             }
+
+
             results.add(newRepo);
         }
-
-
-
-
-
-
-        return new ArrayList<Repository>();
-
+        return results;
     }
 }
