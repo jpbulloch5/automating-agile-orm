@@ -3,6 +3,7 @@ package utils;
 import annotations.Column;
 import scriptors.TableScriptor;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
@@ -15,6 +16,8 @@ import java.util.List;
 
 public class Repository {
     private Connection conn;
+    private Repository newRepo;
+
     public Repository(Connection conn) {
         this.conn = conn;
     }
@@ -48,21 +51,25 @@ public class Repository {
         List<Repository> results = new LinkedList<>();
         while(rs.next())
         {
-            Repository newRepo = repo.newInstance(conn);
+            Repository newRepo = repo.getConstructor(Connection.class).newInstance(conn);
+
 
             Field[] fields = repo.getDeclaredFields();
+
             for (Field field : fields) {
+                field.setAccessible (true);
                 field.set(newRepo, rs.getObject(field.getAnnotation(Column.class).columnName()));
+
+                //delete this later
+                System.out.println (field);
+
             }
+
+
             results.add(newRepo);
         }
 
-
-
-
-
-
-        return new ArrayList<Repository>();
+        return results;
 
     }
 }
