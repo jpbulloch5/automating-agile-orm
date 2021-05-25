@@ -56,15 +56,28 @@ public class Driver {
 
             TestEntity newEntity = new TestEntity(conn);
             newEntity.setOrm_test_id(UUID.randomUUID());
-            newEntity.setOrm_string("newTestString");
+            newEntity.setOrm_string("chamgeme");
             newEntity.setOrm_int(0);
             newEntity.setOrm_fk(UUID.randomUUID());
 
-            System.out.println("update existing entry...");
-            updateEntity.save();
+            //System.out.println("update existing entry...");
+            //updateEntity.save();
 
-            System.out.println("create new entry...");
-            newEntity.save();
+            //System.out.println("create new entry...");
+            //ewEntity.save();
+
+            //System.out.println("deleting existing entry...");
+            //updateEntity.delete();
+
+//            System.out.println("Testing refresh...");
+//            System.out.println("Old string: " + newEntity.getOrm_string());
+//            newEntity.save();
+//
+//            newEntity.setOrm_string("Changed String with method.");
+//            newEntity.save();
+//
+//            newEntity.refresh();
+//            System.out.println("New string: " + newEntity.getOrm_string());
 
 
 
