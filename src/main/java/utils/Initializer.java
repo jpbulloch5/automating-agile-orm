@@ -3,9 +3,8 @@ package utils;
 import annotations.ForeignKey;
 import annotations.Table;
 import exceptions.MalformedTableException;
-import scriptors.TableScriptor;
+import scriptors.SQLScriptor;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,22 +12,8 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class Initializer {
-
-    //SORT TABLES TO CREATE
-    //use a structure that can be re-ordered rapidly... treemap? K=tableName V=Class obj
-    //while tree not empty, get first key -> get table
-    //check if table references another
-    //      if yes - call recusrive reference sorting function
-    //                  recursively look for FK references repeating this step until
-    //                  if FK -> PK not found, check to see if it's already been moved.
-    //                          found table with no references, pop into end of sorted list
-    //      if no - pop table into end of sorted list
-    //once tree is empty, the sorted list should be in "waterfall" order.
-
-
-
     public static void initializeTable(Class<? extends Repository> repo, Connection conn) throws MalformedTableException, SQLException {
-        String sql = TableScriptor.buildCreateTableStatement(repo);
+        String sql = SQLScriptor.buildCreateTableStatement(repo);
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.executeUpdate();
     }

@@ -6,7 +6,9 @@
 
     <groupId>eTeam</groupId>
     <artifactId>eORM</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.9</version>
+    <packaging>jar</packaging>
+    <name>Team-e custom ORM</name>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -21,5 +23,15 @@
             <version>42.2.5</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+            </plugin>
+        </plugins>
+    </build>
     
 </project>

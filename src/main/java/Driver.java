@@ -1,18 +1,15 @@
 
 import exceptions.DBConnectionException;
-import scriptors.TableScriptor;
 import testjunk.TestFKEntity;
 import testjunk.TestFKEntityTwo;
 import utils.ConnectionFactory;
 import testjunk.TestEntity;
-import utils.Initializer;
 import utils.Repository;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 
-import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -69,15 +66,15 @@ public class Driver {
             //System.out.println("deleting existing entry...");
             //updateEntity.delete();
 
-//            System.out.println("Testing refresh...");
-//            System.out.println("Old string: " + newEntity.getOrm_string());
-//            newEntity.save();
-//
-//            newEntity.setOrm_string("Changed String with method.");
-//            newEntity.save();
-//
-//            newEntity.refresh();
-//            System.out.println("New string: " + newEntity.getOrm_string());
+            System.out.println("Testing refresh...");
+            System.out.println("Old string: " + newEntity.getOrm_string());
+            newEntity.save();
+
+            newEntity.setOrm_string("Changed String with method.");
+            newEntity.save();
+
+            newEntity.refresh();
+            System.out.println("New string: " + newEntity.getOrm_string());
 
 
 

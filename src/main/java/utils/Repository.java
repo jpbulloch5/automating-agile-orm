@@ -1,12 +1,9 @@
 package utils;
 
-import annotations.Column;
-import scriptors.TableScriptor;
+import scriptors.SQLScriptor;
 
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,7 +27,7 @@ public class Repository {
     }
 
     public void save() throws IllegalAccessException, SQLException {
-        PreparedStatement pstmt = TableScriptor.buildSaveStatement(this);
+        PreparedStatement pstmt = SQLScriptor.buildSaveStatement(this);
         PreparedStatement fixedStmt = conn.prepareStatement(pstmt.toString());//this is ugly, why doesn't it like UUID's without this?
         System.out.println("pstmt toString(): " + pstmt.toString());
 
@@ -44,7 +41,7 @@ public class Repository {
         //build a sql query to query those fields
         //run it
         //update fields
-        PreparedStatement pstmt = TableScriptor.buildRefreshStatement(this);
+        PreparedStatement pstmt = SQLScriptor.buildRefreshStatement(this);
         PreparedStatement fixedstmt = conn.prepareStatement(pstmt.toString());
         ResultSet rs = fixedstmt.executeQuery();
         if(rs.next()) {
@@ -62,7 +59,7 @@ public class Repository {
     public void delete() throws SQLException, IllegalAccessException {
         //remove from db
         //delete where UUID = UUID;
-        PreparedStatement pstmt = TableScriptor.buildDeleteStatement(this);
+        PreparedStatement pstmt = SQLScriptor.buildDeleteStatement(this);
         PreparedStatement fixedStmt = conn.prepareStatement(pstmt.toString());
         //pstmt.executeUpdate();
         fixedStmt.executeUpdate();
@@ -71,7 +68,7 @@ public class Repository {
 
     public static List<Repository> query(Connection conn, Class<? extends Repository> repo)
             throws SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        String sql = TableScriptor.buildQueryStatement(repo);
+        String sql = SQLScriptor.buildQueryStatement(repo);
         PreparedStatement pstmt = conn.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
         List<Repository> results = new LinkedList<>();
