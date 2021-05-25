@@ -15,6 +15,9 @@ public class TestFKEntityTwo extends Repository{
         super(conn);
     }
 
+    @Column(type = SQLType.UUID, primaryKey = true)
+    private UUID orm_test_fk_two_id;
+
     @Column(/*columnName = "orm_string", */type = SQLType.VARCHAR)
     private String test_string_two;
 
@@ -48,5 +51,13 @@ public class TestFKEntityTwo extends Repository{
 
     public void setTest_fk_id_two(UUID test_fk_id_two) {
         this.test_fk_id_two = test_fk_id_two;
+    }
+
+    public UUID getOrm_test_fk_two_id() {
+        return orm_test_fk_two_id;
+    }
+
+    public void setOrm_test_fk_two_id(UUID orm_test_fk_two_id) {
+        this.orm_test_fk_two_id = orm_test_fk_two_id;
     }
 }
