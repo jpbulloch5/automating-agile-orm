@@ -86,6 +86,45 @@ public abstract class TableScriptor {
         return pstmt;
     }
 
+    public static PreparedStatement buildDeleteStatement(Repository repo) throws IllegalAccessException, SQLException {
+        String tableName = repo.getClass().getAnnotation(Table.class).tableName();
+        String sql = "DELETE FROM " + tableName + " WHERE " + tableName + "_id = ?";
+        Field[] fields = repo.getClass().getDeclaredFields();
+        String primaryKey = "";
+        for (Field field : fields) {
+            //System.out.println("field: " + field.getName());
+            if(field.getAnnotation(Column.class).primaryKey()) {
+                field.setAccessible(true);
+                //System.out.println("Primary key found!");
+                primaryKey = field.get(repo).toString();
+                field.setAccessible(false);
+            }
+        }
+        PreparedStatement pstmt = repo.getConn().prepareStatement(sql);
+        pstmt.setObject(1, primaryKey);
+
+        return pstmt;
+
+    }
+
+    public static PreparedStatement buildRefreshStatement(Repository repo) throws IllegalAccessException, SQLException {
+        String tableName = repo.getClass().getAnnotation(Table.class).tableName();
+        String sql = "SELECT * FROM " + tableName + " WHERE " + tableName + "_id = ?";
+        String primaryKey = "";
+        Field[] fields = repo.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            if(field.getAnnotation(Column.class).primaryKey()) {
+                field.setAccessible(true);
+                primaryKey = field.get(repo).toString();
+                field.setAccessible(false);
+            }
+        }
+        PreparedStatement pstmt = repo.getConn().prepareStatement(sql);
+        pstmt.setObject(1, primaryKey);
+
+        return pstmt;
+    }
+
 
     public static String buildCreateTableStatement(Class<? extends Repository> repo) throws MalformedTableException {
         if (!repo.isAnnotationPresent(Table.class)) {

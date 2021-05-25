@@ -38,17 +38,35 @@ public class Repository {
         fixedStmt.executeUpdate();
     }
 
-    public void refresh() {
+    public void refresh() throws SQLException, IllegalAccessException {
         //re-load from db based on UUID
         //reflect on this (child object) fields
         //build a sql query to query those fields
         //run it
         //update fields
+        PreparedStatement pstmt = TableScriptor.buildRefreshStatement(this);
+        PreparedStatement fixedstmt = conn.prepareStatement(pstmt.toString());
+        ResultSet rs = fixedstmt.executeQuery();
+        if(rs.next()) {
+            Field[] fields = this.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true);
+                //field.set(rs.getObject(field.getName()));
+                field.set(this, rs.getObject(field.getName()));
+                field.setAccessible(false);
+            }
+        }
+
     }
 
-    public void delete() {
+    public void delete() throws SQLException, IllegalAccessException {
         //remove from db
         //delete where UUID = UUID;
+        PreparedStatement pstmt = TableScriptor.buildDeleteStatement(this);
+        PreparedStatement fixedStmt = conn.prepareStatement(pstmt.toString());
+        //pstmt.executeUpdate();
+        fixedStmt.executeUpdate();
+        //System.out.println("DELETE: " + pstmt.toString());
     }
 
     public static List<Repository> query(Connection conn, Class<? extends Repository> repo)
