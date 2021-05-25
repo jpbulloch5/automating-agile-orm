@@ -16,15 +16,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.TreeMap;
 
-/*
-host=database.ciwpi6yisnng.us-east-2.rds.amazonaws.com
-port=5432
-dbname=postgres
-schemaname=test_schema
-username=appuser
-password=4ppp4ssDontGoChasingWaterfalls
-driver=org.postgresql.Driver
- */
 
 public class Driver {
     public static void main(String[] args){
