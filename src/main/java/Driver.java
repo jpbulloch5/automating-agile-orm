@@ -1,20 +1,22 @@
 
 import exceptions.DBConnectionException;
+import scriptors.TableScriptor;
 import testjunk.TestFKEntity;
 import testjunk.TestFKEntityTwo;
 import utils.ConnectionFactory;
-import utils.Initializer;
 import testjunk.TestEntity;
+import utils.Initializer;
 import utils.Repository;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 
-import java.sql.SQLOutput;
+import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Properties;
 import java.util.TreeMap;
+import java.util.UUID;
 
 
 public class Driver {
@@ -32,7 +34,7 @@ public class Driver {
             //Initializer.initializeTableList(tableList, conn);
 
 
-         List<Repository> queryResults = Repository.query(conn, TestEntity.class);
+            List<Repository> queryResults = Repository.query(conn, TestEntity.class);
 
 
             for (Repository queryResult : queryResults) {
@@ -44,6 +46,26 @@ public class Driver {
                 System.out.println("orm_fk: " + ((TestEntity)queryResult).getOrm_fk());
                 System.out.println("================================================");
             }
+
+            //TableScriptor.buildSaveStatement(queryResults.get(0));
+            TestEntity updateEntity = new TestEntity(conn);
+            updateEntity.setOrm_test_id(UUID.fromString("57785682-bc26-11eb-855c-b7b6b5f5da34"));
+            updateEntity.setOrm_string("existingEntity");
+            updateEntity.setOrm_int(1);
+            updateEntity.setOrm_fk(UUID.fromString("5d429f5a-bc26-11eb-855d-374dc522fb11"));
+
+            TestEntity newEntity = new TestEntity(conn);
+            newEntity.setOrm_test_id(UUID.randomUUID());
+            newEntity.setOrm_string("newTestString");
+            newEntity.setOrm_int(0);
+            newEntity.setOrm_fk(UUID.randomUUID());
+
+            System.out.println("update existing entry...");
+            updateEntity.save();
+
+            System.out.println("create new entry...");
+            newEntity.save();
+
 
 
         } catch (Exception e) {

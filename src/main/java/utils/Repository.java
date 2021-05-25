@@ -11,10 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Repository {
     private Connection conn;
@@ -24,12 +21,21 @@ public class Repository {
         this.conn = conn;
     }
 
-    public void save() {
-        //create or update
-        //reflect on this (child object) fields
-        //build a sql statement that does insert into, or update
-        //execute it
+    public Connection getConn() {
+        return conn;
+    }
 
+    public void setConn(Connection conn) {
+        this.conn = conn;
+    }
+
+    public void save() throws IllegalAccessException, SQLException {
+        PreparedStatement pstmt = TableScriptor.buildSaveStatement(this);
+        PreparedStatement fixedStmt = conn.prepareStatement(pstmt.toString());//this is ugly, why doesn't it like UUID's without this?
+        System.out.println("pstmt toString(): " + pstmt.toString());
+
+        //pstmt.executeUpdate();
+        fixedStmt.executeUpdate();
     }
 
     public void refresh() {
