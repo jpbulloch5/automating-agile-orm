@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public abstract class TableScriptor {
+public abstract class SQLScriptor {
 
     public static String buildQueryStatement(Class <? extends Repository> repo) {
         return"SELECT * FROM " + repo.getAnnotation(Table.class).tableName();
