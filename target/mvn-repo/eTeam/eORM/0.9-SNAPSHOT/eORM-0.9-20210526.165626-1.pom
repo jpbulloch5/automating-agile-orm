@@ -4,10 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>eteam</groupId>
-    <artifactId>eorm</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <groupId>eTeam</groupId>
+    <artifactId>eORM</artifactId>
+    <version>0.9-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>Team-e custom ORM</name>
 
     <properties>
@@ -42,21 +42,12 @@
 
     <distributionManagement>
         <repository>
-            <id>github</id>
-            <name>GitHub KylePlummerBSCS Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/KylePlummerBSCS/eORM</url>
-        </repository>
-    </distributionManagement>
-<!--
-    <distributionManagement>
-        <repository>
             <id>internal.repo</id>
             <name>Temporary Staging Repository</name>
             <url>file://${project.build.directory}/mvn-repo</url>
         </repository>
     </distributionManagement>
--->
-    <!--
+
     <build>
         <plugins>
             <plugin>
@@ -71,16 +62,16 @@
                 <artifactId>site-maven-plugin</artifactId>
                 <version>0.11</version>
                 <configuration>
-                    <message>Maven artifacts for ${project.version}</message>
-                    <noJekyll>true</noJekyll>
-                    <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
-                    <branch>refs/heads/mvn-repo</branch>
+                    <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
+                    <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
+                    <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
+                    <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
                     <includes><include>**/*</include></includes>
-                    <repositoryName>team_e_p1_orm</repositoryName>
-                    <repositoryOwner>210426-java-react-enterprise</repositoryOwner>
+                    <repositoryName>team_e_p1_orm</repositoryName>      <!-- github repo name -->
+                    <repositoryOwner>210426-java-react-enterprise</repositoryOwner>    <!-- github username  -->
                 </configuration>
                 <executions>
-
+                    <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
                     <execution>
                         <goals>
                             <goal>site</goal>
@@ -91,6 +82,5 @@
             </plugin>
         </plugins>
     </build>
--->
     
 </project>

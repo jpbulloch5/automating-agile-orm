@@ -1,19 +1,16 @@
 
 import exceptions.DBConnectionException;
-import testjunk.TestFKEntity;
-import testjunk.TestFKEntityTwo;
+import testjunk.DBTable;
 import utils.ConnectionFactory;
-import testjunk.TestEntity;
-import utils.Repository;
+
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 
-import java.util.List;
+
 import java.util.Properties;
-import java.util.TreeMap;
-import java.util.UUID;
+
 
 
 public class Driver {
@@ -21,60 +18,37 @@ public class Driver {
         Connection conn;
         try {
             conn = connect("src/main/resources/jdbc.properties");
-            //conn = connect("database.ciwpi6yisnng.us-east-2.rds.amazonaws.com",5432,"postgres","test_schema","appuser","4ppp4ssDontGoChasingWaterfalls","org.postgresql.Driver");
-            TreeMap<String, Class<? extends Repository>> tableList = new TreeMap<>();
-            tableList.put("orm_test_fk_two", TestFKEntityTwo.class);
-            tableList.put("orm_test_fk", TestFKEntity.class);
-            tableList.put("orm_test", TestEntity.class);
 
-            //create tables
-            //Initializer.initializeTableList(tableList, conn);
+            DBTable newTable = new DBTable(conn);
+            newTable.InitializeTable();
+            //Initializer.initializeTable(DBTable.class, conn);
 
-
-            List<Repository> queryResults = Repository.query(conn, TestEntity.class);
-
-
-            for (Repository queryResult : queryResults) {
-                //System.out.println("Result: " + queryResult.toString());
-                System.out.println("================================================");
-                System.out.println("ID: " + ((TestEntity)queryResult).getOrm_test_id());
-                System.out.println("orm_string: " + ((TestEntity)queryResult).getOrm_string());
-                System.out.println("orm_int: " + ((TestEntity)queryResult).getOrm_int());
-                System.out.println("orm_fk: " + ((TestEntity)queryResult).getOrm_fk());
-                System.out.println("================================================");
-            }
-
-            //TableScriptor.buildSaveStatement(queryResults.get(0));
-            TestEntity updateEntity = new TestEntity(conn);
-            updateEntity.setOrm_test_id(UUID.fromString("57785682-bc26-11eb-855c-b7b6b5f5da34"));
-            updateEntity.setOrm_string("existingEntity");
-            updateEntity.setOrm_int(1);
-            updateEntity.setOrm_fk(UUID.fromString("5d429f5a-bc26-11eb-855d-374dc522fb11"));
-
-            TestEntity newEntity = new TestEntity(conn);
-            newEntity.setOrm_test_id(UUID.randomUUID());
-            newEntity.setOrm_string("chamgeme");
-            newEntity.setOrm_int(0);
-            newEntity.setOrm_fk(UUID.randomUUID());
-
-            //System.out.println("update existing entry...");
-            //updateEntity.save();
-
-            //System.out.println("create new entry...");
-            //ewEntity.save();
-
-            //System.out.println("deleting existing entry...");
-            //updateEntity.delete();
-
-            System.out.println("Testing refresh...");
-            System.out.println("Old string: " + newEntity.getOrm_string());
-            newEntity.save();
-
-            newEntity.setOrm_string("Changed String with method.");
-            newEntity.save();
-
-            newEntity.refresh();
-            System.out.println("New string: " + newEntity.getOrm_string());
+//            TestEntity newEntity = new TestEntity(conn);
+//            newEntity.setOrm_test_id(UUID.randomUUID());
+//            newEntity.setOrm_string("Brand New Entity");
+//            newEntity.setOrm_int(10);
+//            newEntity.setOrm_fk(UUID.randomUUID());
+//
+//            TestEntity updateEntity = new TestEntity(conn);
+//            updateEntity.setOrm_test_id(UUID.fromString("76420919-ab02-4e1f-99b5-8726474986a9"));
+//            updateEntity.setOrm_string("Updated Entity");
+//            updateEntity.setOrm_int(10);
+//            updateEntity.setOrm_fk(UUID.fromString("2c8f28fe-9958-4c6b-9018-294b743c447c"));
+//
+//            //System.out.println("ID: " + newEntity.getOrm_test_id());
+//
+//            newEntity.save();
+//            updateEntity.save();
+//
+//            TestEntity refreshEntity = new TestEntity(conn);
+//            refreshEntity.setOrm_test_id(UUID.fromString("76420919-ab02-4e1f-99b5-8726474986a9"));
+//
+//            refreshEntity.refresh();
+//            System.out.println("Refresh: " + refreshEntity.getOrm_string());
+//
+//            TestEntity deleteEntity = new TestEntity(conn);
+//            deleteEntity.setOrm_test_id(UUID.fromString("4c83a880-bc26-11eb-855b-07091210f320"));
+//            deleteEntity.delete();
 
 
 

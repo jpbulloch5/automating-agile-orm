@@ -1,5 +1,6 @@
 package utils;
 
+import exceptions.MalformedTableException;
 import scriptors.SQLScriptor;
 
 import java.lang.reflect.Field;
@@ -26,29 +27,22 @@ public class Repository {
         this.conn = conn;
     }
 
+    public void InitializeTable() throws SQLException, MalformedTableException {
+        TableInitializer.initializeTable(this);
+    }
+
     public void save() throws IllegalAccessException, SQLException {
         PreparedStatement pstmt = SQLScriptor.buildSaveStatement(this);
-        PreparedStatement fixedStmt = conn.prepareStatement(pstmt.toString());//this is ugly, why doesn't it like UUID's without this?
-        System.out.println("pstmt toString(): " + pstmt.toString());
-
-        //pstmt.executeUpdate();
-        fixedStmt.executeUpdate();
+        pstmt.executeUpdate();
     }
 
     public void refresh() throws SQLException, IllegalAccessException {
-        //re-load from db based on UUID
-        //reflect on this (child object) fields
-        //build a sql query to query those fields
-        //run it
-        //update fields
         PreparedStatement pstmt = SQLScriptor.buildRefreshStatement(this);
-        PreparedStatement fixedstmt = conn.prepareStatement(pstmt.toString());
-        ResultSet rs = fixedstmt.executeQuery();
+        ResultSet rs = pstmt.executeQuery();
         if(rs.next()) {
             Field[] fields = this.getClass().getDeclaredFields();
             for (Field field : fields) {
                 field.setAccessible(true);
-                //field.set(rs.getObject(field.getName()));
                 field.set(this, rs.getObject(field.getName()));
                 field.setAccessible(false);
             }
@@ -57,13 +51,8 @@ public class Repository {
     }
 
     public void delete() throws SQLException, IllegalAccessException {
-        //remove from db
-        //delete where UUID = UUID;
         PreparedStatement pstmt = SQLScriptor.buildDeleteStatement(this);
-        PreparedStatement fixedStmt = conn.prepareStatement(pstmt.toString());
-        //pstmt.executeUpdate();
-        fixedStmt.executeUpdate();
-        //System.out.println("DELETE: " + pstmt.toString());
+        pstmt.executeUpdate();
     }
 
     public static List<Repository> query(Connection conn, Class<? extends Repository> repo)
@@ -84,8 +73,6 @@ public class Repository {
                 field.set(newRepo, rs.getObject(field.getName()));
                 field.setAccessible (false);
 
-                //delete this later
-                //System.out.println (field);
 
             }
 

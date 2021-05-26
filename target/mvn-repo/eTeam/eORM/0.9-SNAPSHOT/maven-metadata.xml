@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>eTeam</groupId>
+  <artifactId>eORM</artifactId>
+  <version>0.9-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20210526.170043</timestamp>
+      <buildNumber>2</buildNumber>
+    </snapshot>
+    <lastUpdated>20210526170043</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>0.9-20210526.170043-2</value>
+        <updated>20210526170043</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>0.9-20210526.170043-2</value>
+        <updated>20210526170043</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>

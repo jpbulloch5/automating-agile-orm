@@ -2,11 +2,10 @@ package utils;
 
 import exceptions.DBConnectionException;
 
-import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
+
 
 
 /**
@@ -66,18 +65,18 @@ public class ConnectionFactory {
      * Can be used to cause next call to getConnection() to invoke constructor
      * and establish a new connection to database.
      */
-    public void closeConnection() throws SQLException {
+    public static void closeConnection() throws SQLException {
         connection.close();
         connectionFactory = null;
 
     }
 
-    /**
-     * calls closeConnection() upon destruction of this object to gracefully terminate
-     * connection before garbage collection
-     */
-    public void finalize() throws SQLException{
-        this.closeConnection();
-    }
+//    /**
+//     * calls closeConnection() upon destruction of this object to gracefully terminate
+//     * connection before garbage collection
+//     */
+//    public void finalize() throws SQLException{
+//        this.closeConnection();
+//    }
 
 }
