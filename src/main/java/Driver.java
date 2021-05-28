@@ -1,7 +1,8 @@
 
-import exceptions.DBConnectionException;
+import eorm.exceptions.DBConnectionException;
 import testjunk.DBTable;
-import utils.ConnectionFactory;
+import eorm.utils.ConnectionFactory;
+import testjunk.TestEntity;
 
 
 import java.io.FileReader;
@@ -10,7 +11,7 @@ import java.sql.Connection;
 
 
 import java.util.Properties;
-
+import java.util.UUID;
 
 
 public class Driver {
@@ -23,32 +24,32 @@ public class Driver {
             newTable.InitializeTable();
             //Initializer.initializeTable(DBTable.class, conn);
 
-//            TestEntity newEntity = new TestEntity(conn);
-//            newEntity.setOrm_test_id(UUID.randomUUID());
-//            newEntity.setOrm_string("Brand New Entity");
-//            newEntity.setOrm_int(10);
-//            newEntity.setOrm_fk(UUID.randomUUID());
-//
-//            TestEntity updateEntity = new TestEntity(conn);
-//            updateEntity.setOrm_test_id(UUID.fromString("76420919-ab02-4e1f-99b5-8726474986a9"));
-//            updateEntity.setOrm_string("Updated Entity");
-//            updateEntity.setOrm_int(10);
-//            updateEntity.setOrm_fk(UUID.fromString("2c8f28fe-9958-4c6b-9018-294b743c447c"));
-//
-//            //System.out.println("ID: " + newEntity.getOrm_test_id());
-//
-//            newEntity.save();
-//            updateEntity.save();
-//
-//            TestEntity refreshEntity = new TestEntity(conn);
-//            refreshEntity.setOrm_test_id(UUID.fromString("76420919-ab02-4e1f-99b5-8726474986a9"));
-//
-//            refreshEntity.refresh();
-//            System.out.println("Refresh: " + refreshEntity.getOrm_string());
-//
-//            TestEntity deleteEntity = new TestEntity(conn);
-//            deleteEntity.setOrm_test_id(UUID.fromString("4c83a880-bc26-11eb-855b-07091210f320"));
-//            deleteEntity.delete();
+            TestEntity newEntity = new TestEntity(conn);
+            newEntity.setOrm_test_id(UUID.randomUUID());
+            newEntity.setOrm_string("Brand New Entity");
+            newEntity.setOrm_int(10);
+            newEntity.setOrm_fk(UUID.randomUUID());
+
+            TestEntity updateEntity = new TestEntity(conn);
+            updateEntity.setOrm_test_id(UUID.fromString("76420919-ab02-4e1f-99b5-8726474986a9"));
+            updateEntity.setOrm_string("Updated Entity!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            updateEntity.setOrm_int(10);
+            updateEntity.setOrm_fk(UUID.fromString("2c8f28fe-9958-4c6b-9018-294b743c447c"));
+
+            //System.out.println("ID: " + newEntity.getOrm_test_id());
+
+            newEntity.save();
+            updateEntity.save();
+
+            TestEntity refreshEntity = new TestEntity(conn);
+            refreshEntity.setOrm_test_id(UUID.fromString("76420919-ab02-4e1f-99b5-8726474986a9"));
+
+            refreshEntity.refresh();
+            System.out.println("Refresh: " + refreshEntity.getOrm_string());
+
+            TestEntity deleteEntity = new TestEntity(conn);
+            deleteEntity.setOrm_test_id(UUID.fromString("4c83a880-bc26-11eb-855b-07091210f320"));
+            deleteEntity.delete();
 
 
 

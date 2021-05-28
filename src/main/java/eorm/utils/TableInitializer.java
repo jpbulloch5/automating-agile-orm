@@ -1,9 +1,9 @@
-package utils;
+package eorm.utils;
 
-import annotations.ForeignKey;
-import annotations.Table;
-import exceptions.MalformedTableException;
-import scriptors.SQLScriptor;
+import eorm.annotations.ForeignKey;
+import eorm.annotations.Table;
+import eorm.exceptions.MalformedTableException;
+import eorm.scriptors.SQLScriptor;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;

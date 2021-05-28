@@ -1,11 +1,11 @@
-package scriptors;
+package eorm.scriptors;
 
-import annotations.Column;
-import annotations.DefaultValue;
-import annotations.ForeignKey;
-import annotations.Table;
-import exceptions.MalformedTableException;
-import utils.Repository;
+import eorm.annotations.Column;
+import eorm.annotations.DefaultValue;
+import eorm.annotations.ForeignKey;
+import eorm.annotations.Table;
+import eorm.exceptions.MalformedTableException;
+import eorm.utils.Repository;
 
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;

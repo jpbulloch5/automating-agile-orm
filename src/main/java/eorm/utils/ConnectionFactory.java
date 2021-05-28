@@ -1,6 +1,6 @@
-package utils;
+package eorm.utils;
 
-import exceptions.DBConnectionException;
+import eorm.exceptions.DBConnectionException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

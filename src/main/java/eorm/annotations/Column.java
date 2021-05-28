@@ -1,6 +1,6 @@
-package annotations;
+package eorm.annotations;
 
-import enums.SQLType;
+import eorm.enums.SQLType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

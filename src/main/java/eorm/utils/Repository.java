@@ -1,7 +1,7 @@
-package utils;
+package eorm.utils;
 
-import exceptions.MalformedTableException;
-import scriptors.SQLScriptor;
+import eorm.exceptions.MalformedTableException;
+import eorm.scriptors.SQLScriptor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class Repository {
+public abstract class Repository {
     private Connection conn;
     private Repository newRepo;
 

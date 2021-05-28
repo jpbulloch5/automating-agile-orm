@@ -1,11 +1,11 @@
 package testjunk;
 
-import annotations.Column;
-import annotations.DefaultValue;
-import annotations.ForeignKey;
-import annotations.Table;
-import enums.SQLType;
-import utils.Repository;
+import eorm.annotations.Column;
+import eorm.annotations.DefaultValue;
+import eorm.annotations.ForeignKey;
+import eorm.annotations.Table;
+import eorm.enums.SQLType;
+import eorm.utils.Repository;
 
 import java.sql.Connection;
 import java.util.UUID;
