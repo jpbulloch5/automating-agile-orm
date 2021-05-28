@@ -44,7 +44,7 @@ For all FK's simply force a default value. This takes care of most FK alteration
 throw runtime errors in case of things like mutually exclusive !nullable + unique, or !nullable without
 default.
  
-Use annotations to describe a table and columns in a POJO or Repository class.
+Use eorm.annotations to describe a table and columns in a POJO or Repository class.
 - @table - this class represents a table
 - @column - this field gets stored in a column
   - type=(type) - attribute describing the data type. Map like to like java <--> SQL
