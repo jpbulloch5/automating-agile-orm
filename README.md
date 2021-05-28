@@ -1,52 +1,123 @@
 # Team e - P1 - Custom Object Relational Mapping Framework
 
-## Description
+## Description:
+As of 1.0, eORM, the team e custom ORM, supports basic CRUD functionality, basic connections to a postgresql database,
+and basic programmatic table creation via annotations.
 
-Your first project will be to create a custom object relational mapping (ORM) framework. This framework will allow for a simplified and SQL-free interaction with the relational data source. The requires of the project are purposefully vague, the intention is to allow for you to be creative in your implementation of this framework. There are many ways that this task can be approached, and you are encouraged to explore existing Java ORM implementations in order to get some inspiration. The minimum requirement for the custom ORM is to abstract JDBC boilerplate logic from the application which uses it.
+## Annotations:
+### @Table
+- Applies to: Class
+- Required Parameter: String tableName
+      
+`@Table(tableName = "table_name")`
 
-Additionally, you will need to build a simple CRUD web application (what objects you CRUD is up to you and your team). You should leverage the Java EE Servlet API to expose endpoints that allow for interaction with the application.
+The @Table annotation informs eORM that the following class is a table, 
+and specifies the table name in the database. This requires a corresponding field
+in the class of type UUID which is named "<TABLENAME>_id" with the @Table 
+annotation which includes the primaryKey parameter to be true.
 
-## Tech Stack
-- [ ] Java 8
-- [ ] JUnit
-- [ ] Mockito
-- [ ] Apache Maven
-- [ ] Jackson library (for JSON marshalling/unmarshalling)
-- [ ] Java EE Servlet API (v4.0+)
-- [ ] PostGreSQL deployed on AWS RDS
-- [ ] AWS CodeBuild
-- [ ] AWS CodePipeline
-- [ ] Git SCM (on GitHub)
+### @Column
+- Applies to: Field
+- Required Parameter: SQLType type
+- Parameter: boolean primaryKey
+- Parameter: boolean nonNull
+- Parameter: int length
 
-## Functional Requirements
-- [ ] CRUD operations are supported for one or more domain objects via the web application's exposed endpoints
-- [ ] JDBC logic is abstracted away by the custom ORM 
-- [ ] Programmatic persistence of entities (basic CRUD support) using custom ORM
-- [ ] File-based or programmatic configuration of entities
+`@Column(type = SQLType.UUID, primaryKey = true)`
+ 
+`@Column(type = SQLType.VARCHAR, nonNull = true, length = 255)`
 
-## Non-Functional Requirements
-- [ ] 80% line coverage of all service layer classes
-- [ ] Generated Jacoco reports that display coverage metrics
-- [ ] Usage of the java.util.Stream API within your project
-- [ ] Custom ORM source code should be included within the web application as a Maven dependency
-- [ ] Continuous integration pipelines that builds some main branch each project (the ORM and the web app, separately)
+The @Column annotation informs eORM this field is to be represented as a column 
+within the table. At least one column is required n every table, a primary key
+of the type UUID with the same name as the table + "_id".
 
-## Bonus Features
-- [ ] Custom ORM supports basic transaction management (begin, commit, savepoint, rollback) 
-- [ ] Custom ORM supports connection pooling
-- [ ] Session-based caching to minimize calls to the database for already retrieved data
-- [ ] Deployment of web application to AWS EC2 (use of AWS Elastic Beanstalk is permitted) 
+### @DefaultValue
+- Applies to: Field
+- Required Parameter: String defaultValue
 
-## Init Instructions
-- Create a new repository within this organization for your custom ORM (naming convention: `orm_name_p1`; with `orm_name` being replaced by the name of your custom library)
-- Create another new repostory within this organization for your web application
+`@DefaultValue(defaultValue = "def")`
 
-## Presentation
-- Finalized version of custom ORM and web application must be pushed to personal repository within this organization by the presentation date (June 1st, 2021)
-- 10-15 minute live demonstration of the web application (that leverages your custom ORM); demonstration will be performed using PostMan to query your API's endpoints
+The @DefaultValue annotation informs eORM that this table column should have 
+a default value, which is set with the parameter defaultValue.
 
-### Resources for researching ORMs
-- [What is an ORM?](https://blog.bitsrc.io/what-is-an-orm-and-why-you-should-use-it-b2b6f75f5e2a)
-- [Hibernate Documentation](https://hibernate.org/orm/documentation/5.4/)
-- [JavaLite ActiveJDBC Documentation](https://javalite.io/documentation)
-- [Using Java Reflection](https://www.oracle.com/technical-resources/articles/java/javareflection.html)
+
+### @ForeignKey
+- Applies to: Field
+- Required Parameter: String referencedTable
+
+`@ForeignKey(referencedTable = "table_name")`
+
+The @ForeignKey annotation informs eORM that this table has a foreign key relation with another
+table, which is identified in the referencedTable parameter. This parameter should match
+the target table's table name as mentioned in the @Table annotation. The foreign key always
+points to the referenced table's primary key.
+
+## SQLType Enum:
+As of 1.0 the following types can be used in the database:
+ 
+| SQL type | Java type |
+| -------- | --------- |
+| UUID     | UUID      |
+| BOOL     | boolean   |
+| INT      | int       |
+| BIGINT   | long      |
+| NUMERIC  | double    |
+| VARCHAR  | String    |
+
+
+## Connecting:
+Connect to the database with the following information:
+- host
+- port
+- db
+- schema
+- username
+- password
+- driver
+ 
+ These parameters will form a connection URL used by eORM to establish a Connection object.
+ `jdbc:postgresql://[host]:[port]/[db]?currentSchema=[schema]`
+  It uses the username and password provided to authenticate, and uses the driver to provided
+  for the connection. If unsure, use driver: `org.postgresql.Driver`. Please avoid hard 
+  coding these values.
+ 
+ To establish a connection, use the static method:
+ 
+ `Connection conn = eorm.utils.ConnectionFactory(host, port, db, schema, user, password, driver)`
+ 
+ 
+## Table Initialization:
+Before a table exists in the database and can be used, it must be initialized. 
+This only needs to be done once for each table, subsequent calls to initialize() are ignored.
+
+```
+@Table(tableName = "table")
+Class Table extends Repository {
+    @Column(type = SQLType.UUID, primaryKey = true)
+    private UUID table_id;
+}
+Table table = new Table();
+table.initialize();
+```
+
+Tables must extend the Repository class, which contains the initialize and CRUD methods.
+
+## CRUD:
+The create, read, update, delete functionality is handled bythe following methods 
+inherited from Repository: 
+- `public void save()`
+- `public void refresh()`
+- `public void delete()`
+- `public static List<Repository> query()`
+
+Save() will write the values in the object's @Column fields to the @Table table. This is based 
+on the UUID primary key. If the entry already exists, it is updated. Otherwise, it is inserted.
+ 
+Refresh() will load the values into the @Column fields from the @Table table in the database.
+ 
+Delete() will remove the entry matching the UUID primary key from the @Table table.
+ 
+Query() is static, and returns a list of results which represent all of the data in the @Table
+table.
+
+
