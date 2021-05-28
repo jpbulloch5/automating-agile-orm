@@ -28,3 +28,6 @@ hs_err_pid*
 
 #properties file
 *.properties
+
+#Target
+target/
