@@ -40,12 +40,12 @@
 
     </dependencies>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub KylePlummerBSCS Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/KylePlummerBSCS/eORM</url>
-        </repository>
-    </distributionManagement>
+<!--    <distributionManagement>-->
+<!--        <repository>-->
+<!--            <id>github</id>-->
+<!--            <name>GitHub KylePlummerBSCS Apache Maven Packages</name>-->
+<!--            <url>https://maven.pkg.github.com/KylePlummerBSCS/eORM</url>-->
+<!--        </repository>-->
+<!--    </distributionManagement>-->
     
 </project>
