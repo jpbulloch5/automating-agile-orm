@@ -1,4 +1,4 @@
-package enums;
+package eorm.enums;
 
 public enum SQLType {
         UUID,       //UUID

@@ -1,14 +1,13 @@
-package scriptors;
+package eorm.scriptors;
 
-import annotations.Column;
-import annotations.DefaultValue;
-import annotations.ForeignKey;
-import annotations.Table;
-import exceptions.MalformedTableException;
-import utils.Repository;
+import eorm.annotations.Column;
+import eorm.annotations.DefaultValue;
+import eorm.annotations.ForeignKey;
+import eorm.annotations.Table;
+import eorm.exceptions.MalformedTableException;
+import eorm.utils.Repository;
 
 import java.lang.reflect.Field;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,15 +27,13 @@ public abstract class SQLScriptor {
         String insertSQL = "INSERT INTO " + tableName + " (";
         String insertSQLValues = " VALUES (";
         String selectSQL = "SELECT * FROM " + tableName + " WHERE " + tableName + "_id = ?";
-        String primaryKey = "";
-
+        UUID primaryKey = null;
 
         for (int i = 0; i < fields.length; i++) {
             fields[i].setAccessible(true);
-            //System.out.println("DEBUG: setting field " + i + " to accessible.");
             if(fields[i].isAnnotationPresent(Column.class)) {
                 if (fields[i].getAnnotation(Column.class).primaryKey()) {
-                    primaryKey = ((UUID)fields[i].get(repo)).toString();
+                    primaryKey = (UUID)fields[i].get(repo);
                 } else {
                     updateSQL += fields[i].getName() + " = ?";
                     insertSQL += fields[i].getName();
@@ -54,9 +51,9 @@ public abstract class SQLScriptor {
                     }
                 }
             }
-            //System.out.println("DEBUG: setting field " + i + " to inaccessible.");
             fields[i].setAccessible(false);
         }
+
 
         updateSQL += "WHERE " + tableName + "_id = ?";
         data.add(primaryKey);
@@ -64,17 +61,14 @@ public abstract class SQLScriptor {
 
 
         PreparedStatement pstmt = repo.getConn().prepareStatement(selectSQL);
-        pstmt.setObject(1, UUID.fromString(primaryKey));
-        System.out.println(pstmt.toString());
+        pstmt.setObject(1, (UUID)primaryKey);
         ResultSet exists = pstmt.executeQuery();
 
         if(exists.next()) {
             //entry exists, UPDATE
-            System.out.println(updateSQL);
             pstmt = repo.getConn().prepareStatement(updateSQL);
         } else {
             //entry doesn't exist, INSERT
-            System.out.println(insertSQL + insertSQLValues);
             pstmt = repo.getConn().prepareStatement(insertSQL + insertSQLValues);
         }
 
@@ -90,13 +84,11 @@ public abstract class SQLScriptor {
         String tableName = repo.getClass().getAnnotation(Table.class).tableName();
         String sql = "DELETE FROM " + tableName + " WHERE " + tableName + "_id = ?";
         Field[] fields = repo.getClass().getDeclaredFields();
-        String primaryKey = "";
+        UUID primaryKey = null;
         for (Field field : fields) {
-            //System.out.println("field: " + field.getName());
             if(field.getAnnotation(Column.class).primaryKey()) {
                 field.setAccessible(true);
-                //System.out.println("Primary key found!");
-                primaryKey = field.get(repo).toString();
+                primaryKey = (UUID) field.get(repo);
                 field.setAccessible(false);
             }
         }
@@ -110,12 +102,12 @@ public abstract class SQLScriptor {
     public static PreparedStatement buildRefreshStatement(Repository repo) throws IllegalAccessException, SQLException {
         String tableName = repo.getClass().getAnnotation(Table.class).tableName();
         String sql = "SELECT * FROM " + tableName + " WHERE " + tableName + "_id = ?";
-        String primaryKey = "";
+        UUID primaryKey = null;
         Field[] fields = repo.getClass().getDeclaredFields();
         for (Field field : fields) {
             if(field.getAnnotation(Column.class).primaryKey()) {
                 field.setAccessible(true);
-                primaryKey = field.get(repo).toString();
+                primaryKey = (UUID)field.get(repo);
                 field.setAccessible(false);
             }
         }
@@ -126,18 +118,18 @@ public abstract class SQLScriptor {
     }
 
 
-    public static String buildCreateTableStatement(Class<? extends Repository> repo) throws MalformedTableException {
-        if (!repo.isAnnotationPresent(Table.class)) {
+    //public static String buildCreateTableStatement(Class<? extends Repository> repo) throws MalformedTableException {
+    public static String buildCreateTableStatement(Repository repo) throws MalformedTableException {
+        if (!repo.getClass().isAnnotationPresent(Table.class)) {
             throw new MalformedTableException("Missing @Table annotation.");
         }
 
 
-        String tableName = repo.getAnnotation(Table.class).tableName();
-
+        String tableName = repo.getClass().getAnnotation(Table.class).tableName();
         String idName = tableName + "_id";
 
         //iterate through annotated fields
-        Field[] fields = repo.getDeclaredFields();
+        Field[] fields = repo.getClass().getDeclaredFields();
         List<String> columns = new ArrayList<>();
         List<String> foreignKeys = new ArrayList<>();
         for (int i = 0; i < fields.length; i++) {
@@ -145,7 +137,7 @@ public abstract class SQLScriptor {
             String dataType;
             String length = "";
             String constraints = "";
-            if(fields[i].isAnnotationPresent(Column.class)/* && !fields[i].getAnnotation(Column.class).primaryKey()*/) {//ASSUMING PK FIELD NAME IS EXACTLY TABLE NAME + _id
+            if(fields[i].isAnnotationPresent(Column.class)) {//ASSUMING PK FIELD NAME IS EXACTLY TABLE NAME + _id
                 columnName = fields[i].getName();
                 dataType = " " + fields[i].getAnnotation(Column.class).type().toString();
 
@@ -198,9 +190,8 @@ public abstract class SQLScriptor {
         }
 
         //Assemble the SQL statement
-        String createTableStatement = "CREATE TABLE "
+        String createTableStatement = "CREATE TABLE IF NOT EXISTS "
                 + tableName + " (";
-                //+ idName + " UUID NOT NULL, ";
 
         for (String column : columns) {
             createTableStatement += column;
@@ -210,10 +201,8 @@ public abstract class SQLScriptor {
             createTableStatement += snippet;
         }
 
-
         createTableStatement += "PRIMARY KEY(" + idName + "))";
 
-        //System.out.println("DEBUG: " + createTableStatement);
 
         return createTableStatement;
     }
