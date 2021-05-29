@@ -27,7 +27,7 @@ public abstract class Repository {
         this.conn = conn;
     }
 
-    public void InitializeTable() throws SQLException, MalformedTableException {
+    public void initializeTable() throws SQLException, MalformedTableException {
         TableInitializer.initializeTable(this);
     }
 

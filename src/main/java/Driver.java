@@ -1,5 +1,6 @@
 
 import eorm.exceptions.DBConnectionException;
+import eorm.utils.Repository;
 import testjunk.DBTable;
 import eorm.utils.ConnectionFactory;
 import testjunk.TestEntity;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.sql.Connection;
 
 
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -21,7 +23,7 @@ public class Driver {
             conn = connect("src/main/resources/jdbc.properties");
 
             DBTable newTable = new DBTable(conn);
-            newTable.InitializeTable();
+            newTable.initializeTable();
             //Initializer.initializeTable(DBTable.class, conn);
 
             TestEntity newEntity = new TestEntity(conn);
@@ -51,6 +53,12 @@ public class Driver {
             deleteEntity.setOrm_test_id(UUID.fromString("4c83a880-bc26-11eb-855b-07091210f320"));
             deleteEntity.delete();
 
+            //TestEntity.query(conn, TestEntity.class);
+
+            List<Repository> queryList = TestEntity.query(conn, TestEntity.class);
+            for (Repository repository : queryList) {
+                System.out.println(((TestEntity)repository).getOrm_string());
+            }
 
 
         } catch (Exception e) {
