@@ -13,7 +13,7 @@ import java.util.*;
 
 public abstract class Repository {
     private Connection conn;
-    private Repository newRepo;
+    //private Repository newRepo;
 
     public Repository(Connection conn) {
         this.conn = conn;
@@ -68,15 +68,10 @@ public abstract class Repository {
             Field[] fields = repo.getDeclaredFields();
 
             for (Field field : fields) {
-
                 field.setAccessible (true);
                 field.set(newRepo, rs.getObject(field.getName()));
                 field.setAccessible (false);
-
-
             }
-
-
             results.add(newRepo);
         }
         return results;

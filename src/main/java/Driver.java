@@ -1,9 +1,12 @@
 
 import eorm.exceptions.DBConnectionException;
 import eorm.utils.Repository;
+import eorm.utils.TableInitializer;
 import testjunk.DBTable;
 import eorm.utils.ConnectionFactory;
 import testjunk.TestEntity;
+import testjunk.TestFKEntity;
+import testjunk.TestFKEntityTwo;
 
 
 import java.io.FileReader;
@@ -13,6 +16,7 @@ import java.sql.Connection;
 
 import java.util.List;
 import java.util.Properties;
+import java.util.TreeMap;
 import java.util.UUID;
 
 
@@ -22,43 +26,20 @@ public class Driver {
         try {
             conn = connect("src/main/resources/jdbc.properties");
 
-            DBTable newTable = new DBTable(conn);
-            newTable.initializeTable();
-            //Initializer.initializeTable(DBTable.class, conn);
 
-            TestEntity newEntity = new TestEntity(conn);
-            newEntity.setOrm_test_id(UUID.randomUUID());
-            newEntity.setOrm_string("Brand New Entity");
-            newEntity.setOrm_int(10);
-            newEntity.setOrm_fk(UUID.randomUUID());
+            TreeMap<String, Repository> initializerTest = new TreeMap<>();
 
-            TestEntity updateEntity = new TestEntity(conn);
-            updateEntity.setOrm_test_id(UUID.fromString("76420919-ab02-4e1f-99b5-8726474986a9"));
-            updateEntity.setOrm_string("Updated Entity!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            updateEntity.setOrm_int(10);
-            updateEntity.setOrm_fk(UUID.fromString("2c8f28fe-9958-4c6b-9018-294b743c447c"));
+            DBTable table1 = new DBTable(conn);
+            initializerTest.put("DBTable", table1);
+            TestFKEntity table3 = new TestFKEntity(conn);
+            initializerTest.put("orm_test_fk", table3);
+            TestEntity table2 = new TestEntity(conn);
+            initializerTest.put("orm_test", table2);
+            TestFKEntityTwo table4 = new TestFKEntityTwo(conn);
+            initializerTest.put("orm_test_fk_two", table4);
 
-            //System.out.println("ID: " + newEntity.getOrm_test_id());
+            TableInitializer.initializeTableList(initializerTest, conn);
 
-            newEntity.save();
-            updateEntity.save();
-
-            TestEntity refreshEntity = new TestEntity(conn);
-            refreshEntity.setOrm_test_id(UUID.fromString("76420919-ab02-4e1f-99b5-8726474986a9"));
-
-            refreshEntity.refresh();
-            System.out.println("Refresh: " + refreshEntity.getOrm_string());
-
-            TestEntity deleteEntity = new TestEntity(conn);
-            deleteEntity.setOrm_test_id(UUID.fromString("4c83a880-bc26-11eb-855b-07091210f320"));
-            deleteEntity.delete();
-
-            //TestEntity.query(conn, TestEntity.class);
-
-            List<Repository> queryList = TestEntity.query(conn, TestEntity.class);
-            for (Repository repository : queryList) {
-                System.out.println(((TestEntity)repository).getOrm_string());
-            }
 
 
         } catch (Exception e) {
