@@ -13,7 +13,7 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-<!--        <github.global.server>github</github.global.server>-->
+<!--       <github.global.server>github</github.global.server>-->
     </properties>
 
     <dependencies>
@@ -47,5 +47,5 @@
 <!--            <url>https://maven.pkg.github.com/KylePlummerBSCS/eORM</url>-->
 <!--        </repository>-->
 <!--    </distributionManagement>-->
-    
+<!--    -->
 </project>
