@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  airport_db:
+    container_name: airport_postgres_db
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password123
+    volumes:
+      - airport_db_volume:/var/lib/postgresql/data
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4:latest
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+    - 737:80
+volumes:
+  airport_db_volume:
+    driver: local
