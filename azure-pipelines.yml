@@ -1,39 +1,20 @@
-trigger:
-  branches:
-    include:
-    - dev
-resources:
-  repositories:
-  - repository: self
-variables:
-- name: dockerRegistryServiceConnection
-  value: '252de617-0d4a-42d7-b2a1-070a70eef3a8'
-- name: imageRepository
-  value: 'revaturep1orm'
-- name: containerRegistry
-  value: 'revaturep1orm.azurecr.io'
-- name: dockerfilePath
-  value: 'Dockerfile'
-- name: tag
-  value: '$(Build.BuildId)'
-- name: vmImageName
-  value: 'ubuntu-latest'
-stages:
-- stage: Build
-  displayName: Build and push stage
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - task: Docker@2
-      displayName: Build and push an image to container registry
-      inputs:
-        command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
-        containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tag)
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
+trigger:
+- dev
+
+resources:
+- repo: self
+
+pool:
+  vmImage: 'ubuntu-latest'
+steps:
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Jacob''s Docker Hub'
+    repository: 'revature_p1_orm'
+    command: 'buildAndPush'
+    Dockerfile: 'Dockerfile'
+  displayName: Build ORM in container and push image to DockerHub
