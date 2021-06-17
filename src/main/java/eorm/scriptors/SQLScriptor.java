@@ -13,6 +13,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+
+/**
+ * This is where the magic happens. Classes inheriting from the repository class are reflected upon and dynamic SQL
+ * is generated to initialize tables and carry out CRUD. Unfortunately we did not get to creating table alteration logic,
+ * so if the schema changes, the tables should be dropped and re-initialized. It's a huge mess, so we won't get into the details.
+ */
 public abstract class SQLScriptor {
 
     public static String buildQueryStatement(Class <? extends Repository> repo) {

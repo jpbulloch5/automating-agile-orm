@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class TableInitializer {
-    //public static void initializeTable(Class<? extends Repository> repo, Connection conn) throws MalformedTableException, SQLException {
     public static void initializeTable(Repository repo) throws MalformedTableException, SQLException {
         String sql = SQLScriptor.buildCreateTableStatement(repo);
         Connection conn = repo.getConn();
@@ -20,7 +19,6 @@ public class TableInitializer {
         pstmt.executeUpdate();
     }
 
-    //public static void initializeTableList(TreeMap<String, Class<? extends Repository>> tables, Connection conn) throws MalformedTableException, SQLException {
     public static void initializeTableList(TreeMap<String, Repository> tables, Connection conn) throws MalformedTableException, SQLException {
         while(!tables.isEmpty()) {
             Repository table = tables.firstEntry().getValue();
@@ -28,8 +26,6 @@ public class TableInitializer {
         }
     }
 
-    //private static void recursiveDependencySearch(Connection conn, TreeMap<String,
-            //Class<? extends Repository>> tables, Class<? extends Repository> table) throws SQLException, MalformedTableException {
     private static void recursiveDependencySearch(TreeMap<String, Repository> tables, Repository table) throws SQLException, MalformedTableException {
         Field[] fields = table.getClass().getDeclaredFields();
         for (Field field : fields) {

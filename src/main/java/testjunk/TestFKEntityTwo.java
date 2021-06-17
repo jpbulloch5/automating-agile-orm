@@ -9,6 +9,7 @@ import eorm.utils.Repository;
 
 import java.sql.Connection;
 import java.util.UUID;
+
 @Table(tableName = "orm_test_fk_two")
 public class TestFKEntityTwo extends Repository{
     public TestFKEntityTwo(Connection conn) {

@@ -4,7 +4,6 @@ import eorm.utils.Repository;
 import eorm.enums.SQLType;
 import eorm.annotations.Column;
 import eorm.annotations.DefaultValue;
-import eorm.annotations.ForeignKey;
 import eorm.annotations.Table;
 
 import java.sql.Connection;
