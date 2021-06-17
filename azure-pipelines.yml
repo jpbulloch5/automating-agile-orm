@@ -13,7 +13,7 @@ variables:
   dockerRegistryServiceConnection: '252de617-0d4a-42d7-b2a1-070a70eef3a8'
   imageRepository: 'revaturep1orm'
   containerRegistry: 'revaturep1orm.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
+  dockerfilePath: 'Dockerfile'
   tag: '$(Build.BuildId)'
 
   # Agent VM image name
