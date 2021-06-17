@@ -1,6 +1,6 @@
 # The project is Java with Maven, so the latest maven image should
 # be a good starting point
-FROM tomcat:10-jdk8-openjdk-buster
+FROM tomcat:8-jdk8-openjdk-buster
 
 ### Copied from Maven openjdk-8 Dockerfile:
 ### https://github.com/carlossg/docker-maven/blob/bdffb5117c33476d554325d8efe5866306004b99/openjdk-8/Dockerfile
