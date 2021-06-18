@@ -14,7 +14,7 @@ steps:
 - task: Docker@2
   inputs:
     containerRegistry: 'Jacob''s Docker Hub'
-    repository: 'revature_p1_orm'
+    repository: 'jpbulloch5/revature_p1_orm'
     command: 'buildAndPush'
     Dockerfile: 'Dockerfile'
   displayName: Build ORM in container and push image to DockerHub
