@@ -9,7 +9,8 @@ steps:
 
 - task: MavenAuthenticate@0
   inputs:
-    artifactsFeeds: 'p1'
+    artifactsFeeds: 'Flock-of-Hawks-Artifacts'
+
 # - task: SonarQubePrepare@4
 #   inputs:
 #     SonarQube: 'VM3 SonarQube'
@@ -35,6 +36,7 @@ steps:
 # - task: SonarQubePublish@4
 #   inputs:
 #     pollingTimeoutSec: '300'
+
 
 - task: PublishPipelineArtifact@1
   inputs:
