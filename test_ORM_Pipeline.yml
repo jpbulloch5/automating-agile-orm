@@ -47,3 +47,4 @@ steps:
     vstsFeedPackagePublish: 'orm-jar-package'
     versionOption: 'patch'
     packagePublishDescription: 'orm jar file'
+    verbosity: 'Debug'
