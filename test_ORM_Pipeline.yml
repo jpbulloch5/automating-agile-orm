@@ -38,6 +38,6 @@ steps:
 
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: '$(Pipeline.Workspace)/s/target/eorm-0.9.jar'
+    targetPath: '$(Pipeline.Workspace)/s/target/eorm-1.0.jar'
     artifact: 'ORM_JAR'
     publishLocation: 'pipeline'
