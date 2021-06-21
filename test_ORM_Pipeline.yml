@@ -7,9 +7,10 @@ pool:
 
 steps:
 
-- task: MavenAuthenticate@0
-  inputs:
-    artifactsFeeds: 'Flock-of-Hawks-Artifacts'
+# - task: MavenAuthenticate@0
+#   inputs:
+#     artifactsFeeds: 'Flock-of-Hawks-Artifacts'
+#   displayName: Authenticate Flock-of-Hawks-Artifacts with Maven
 
 - task: SonarQubePrepare@4
   inputs:
