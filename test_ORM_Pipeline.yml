@@ -1,6 +1,6 @@
-
-trigger:
-- main
+# turn of trigger for now to save resources
+# trigger:
+# - main
 
 pool:
   vmImage: ubuntu-latest
