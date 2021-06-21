@@ -11,15 +11,15 @@ steps:
   inputs:
     artifactsFeeds: 'Flock-of-Hawks-Artifacts'
 
-# - task: SonarQubePrepare@4
-#   inputs:
-#     SonarQube: 'VM3 SonarQube'
-#     scannerMode: 'Other'
-#     extraProperties: |
-#       # Additional properties that will be passed to the scanner,
-#       # Put one key=value per line, example:
-#       # sonar.exclusions=**/*.bin
-#       sonar.projectKey=Flock_of_Hawks_team_e_p1_orm
+- task: SonarQubePrepare@4
+  inputs:
+    SonarQube: 'VM3 SonarQube'
+    scannerMode: 'Other'
+    extraProperties: |
+      # Additional properties that will be passed to the scanner,
+      # Put one key=value per line, example:
+      # sonar.exclusions=**/*.bin
+      sonar.projectKey=Flock_of_Hawks_team_e_p1_orm
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
@@ -31,11 +31,13 @@ steps:
     mavenOptions: '-Xmx3072m'
     mavenAuthenticateFeed: false
     effectivePomSkip: false
-    sonarQubeRunAnalysis: false
+    sonarQubeRunAnalysis: true
+    isJacocoCoverageReportXML: true
+    sqMavenPluginVersionChoice: 'latest'
 
-# - task: SonarQubePublish@4
-#   inputs:
-#     pollingTimeoutSec: '300'
+- task: SonarQubePublish@4
+  inputs:
+    pollingTimeoutSec: '300'
 
 
 - task: UniversalPackages@0
