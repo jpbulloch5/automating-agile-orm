@@ -13,7 +13,7 @@ RUN echo '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" \n\
                         https://maven.apache.org/xsd/settings-1.0.0.xsd"> \n\
         <servers> \n\
             <server> \n\
-                <id>Flock-of_Hawks-Artifacts</id>\n\
+                <id>Flock-of-Hawks-Artifacts</id>\n\
                 <username>revature-training-uta</username>\n\
                 <password>'${maven_key}'</password>\n\
             </server>\n\
