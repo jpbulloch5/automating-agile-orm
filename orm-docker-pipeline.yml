@@ -3,8 +3,9 @@
 # This pipeline pushes the 'latest' image to Docker Hub instead of 'latest_dev', which is 
 # triggered by updates to the dev branch
 
-trigger:
-- main
+# switching off the trigger for now so that it doesn't take up resources
+# trigger:
+# - main
 
 resources:
 - repo: self
