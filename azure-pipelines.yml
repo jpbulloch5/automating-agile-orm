@@ -4,6 +4,9 @@
 trigger:
 - dev
 
+variables:
+- group: Keys
+
 resources:
 - repo: self
 
@@ -15,11 +18,12 @@ steps:
   inputs:
     containerRegistry: 'Jacob''s Docker Hub'
     repository: 'jpbulloch5/revature_p1_orm'
-    command: 'buildAndPush'
+    command: 'build'
     Dockerfile: 'Dockerfile'
     tags: |
       $(Build.BuildId)
       latest_dev
+    arguments: '--build-arg maven_key=$(maven_key)'
   displayName: Build ORM in container and push image to DockerHub
 
 - task: ado-discord-webhook@1
