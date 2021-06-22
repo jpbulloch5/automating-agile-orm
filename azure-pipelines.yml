@@ -38,11 +38,17 @@ steps:
 
 - task: ado-discord-webhook@1
   inputs:
-    channelId: '$(FoH_disord_ID)'
+    channelId: 'FoH_disord_ID'
     webhookKey: '$(FoH_discord_webhook)'
-    name: 'Flock of Hawks --> orm_docker_dev'
+    name: '$(System.TeamProject) --> '
     avatar: 'https://avatarfiles.alphacoders.com/565/thumb-1920-56514.jpg'
     messageType: 'content'
-    content: '**Build Number:**```$(Build.BuildNumber)```**Build Reason:**```$(Build.Reason)```**Build Status**```$(Agent.JobStatus)```'
+    content: |
+      __**$(Build.DefinitionName)**__
+      **Build:** $(Build.BuildNumber)
+      **Reason:** $(Build.Reason)
+      **Status:** $(Agent.JobStatus)
+      **Repo:** $(Build.Repository.Uri)
+      **Message:** $(Build.SourceVersionMessage)
   condition: always()
   displayName: send message to Discord 
