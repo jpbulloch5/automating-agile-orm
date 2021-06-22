@@ -21,3 +21,14 @@ steps:
       $(Build.BuildId)
       latest_dev
   displayName: Build ORM in container and push image to DockerHub
+
+- task: ado-discord-webhook@1
+  inputs:
+    channelId: '856747431500447755'
+    webhookKey: 'pnX9mrDlsv86zWC7VMmGQfR9vhvwEGqxWGJjDKyEXltzpPmzwTnC-zz85drbHeZaxw3C'
+    name: 'Flock of Hawks --> orm_docker_dev'
+    avatar: 'https://avatarfiles.alphacoders.com/565/thumb-1920-56514.jpg'
+    messageType: 'content'
+    content: '<br />**Build Number:**```$(Build.BuildNumber)```**Build Reason:**```$(Build.Reason)```**Build Status**```$(Agent.JobStatus)```'
+  condition: always()
+  displayName: send message to Discord 
