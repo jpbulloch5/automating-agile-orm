@@ -48,7 +48,7 @@ steps:
     feedsToUsePublish: 'internal'
     vstsFeedPublish: '24909f86-8d03-4826-8947-55d471b47b72/57273a34-95c4-4b34-8b08-4600b3975070'
     vstsFeedPackagePublish: 'eorm-1.0.jar'
-    versionOption: 'major'
+    versionOption: 'patch'
     packagePublishDescription: 'eorm-1.0.jar'
     verbosity: 'Debug'
 
