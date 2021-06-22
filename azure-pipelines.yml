@@ -29,6 +29,6 @@ steps:
     name: 'Flock of Hawks --> orm_docker_dev'
     avatar: 'https://avatarfiles.alphacoders.com/565/thumb-1920-56514.jpg'
     messageType: 'content'
-    content: '<br />**Build Number:**```$(Build.BuildNumber)```**Build Reason:**```$(Build.Reason)```**Build Status**```$(Agent.JobStatus)```'
+    content: '**Build Number:**```$(Build.BuildNumber)```**Build Reason:**```$(Build.Reason)```**Build Status**```$(Agent.JobStatus)```'
   condition: always()
   displayName: send message to Discord 
