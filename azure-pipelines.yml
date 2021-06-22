@@ -35,10 +35,10 @@ steps:
       $(Build.BuildId)
       latest_dev
   displayName: Push ORM image to DockerHub
-  
+
 - task: ado-discord-webhook@1
   inputs:
-    channelId: '$(FoH_discord_ID)'
+    channelId: '$(FoH_disord_ID)'
     webhookKey: '$(FoH_discord_webhook)'
     name: 'Flock of Hawks --> orm_docker_dev'
     avatar: 'https://avatarfiles.alphacoders.com/565/thumb-1920-56514.jpg'
