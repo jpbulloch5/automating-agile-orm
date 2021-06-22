@@ -11,9 +11,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * The repository class is meant to be inherited by entities. This class has CRUD functions that
+ * can then be invoked by those entities. An entity should have it's own private fields, public getters and setters,
+ * a public constructor that takes in a connection and passes it to super(), and may require special care for jackson
+ * to marshall/unmarshall it.
+ */
 public abstract class Repository {
     private Connection conn;
-    //private Repository newRepo;
 
     public Repository(Connection conn) {
         this.conn = conn;
@@ -27,15 +32,31 @@ public abstract class Repository {
         this.conn = conn;
     }
 
+    /**
+     * Executes table creation SQL based on entity reflection.
+     * @throws SQLException
+     * @throws MalformedTableException
+     */
     public void initializeTable() throws SQLException, MalformedTableException {
         TableInitializer.initializeTable(this);
     }
 
+    /**
+     * executes row creation/update SQL based on entity reflection.
+     * @throws IllegalAccessException
+     * @throws SQLException
+     */
     public void save() throws IllegalAccessException, SQLException {
         PreparedStatement pstmt = SQLScriptor.buildSaveStatement(this);
         pstmt.executeUpdate();
     }
 
+    /**
+     * Executes query based on entity reflection. Requires a UUID. Populates all other fields
+     * from the corresponding table row.
+     * @throws SQLException
+     * @throws IllegalAccessException
+     */
     public void refresh() throws SQLException, IllegalAccessException {
         PreparedStatement pstmt = SQLScriptor.buildRefreshStatement(this);
         ResultSet rs = pstmt.executeQuery();
@@ -47,14 +68,30 @@ public abstract class Repository {
                 field.setAccessible(false);
             }
         }
-
     }
 
+    /**
+     * Executes SQL to delete the corresponding row from the table.
+     * @throws SQLException
+     * @throws IllegalAccessException
+     */
     public void delete() throws SQLException, IllegalAccessException {
         PreparedStatement pstmt = SQLScriptor.buildDeleteStatement(this);
         pstmt.executeUpdate();
     }
 
+    /**
+     * This static function queries the entire table, and is not specific to a particular entity. Use this to retrieve
+     * data without knowing the UUID, and filter.
+     * @param conn - connection object linked to the datasource
+     * @param repo - entity class associated with the table to query.
+     * @return - List of entity objects corresponding to the entity parameter.
+     * @throws SQLException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     */
     public static List<Repository> query(Connection conn, Class<? extends Repository> repo)
             throws SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         String sql = SQLScriptor.buildQueryStatement(repo);

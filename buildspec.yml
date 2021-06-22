@@ -6,14 +6,28 @@ phases:
       java: corretto8
   pre_build:
     commands:
-      - echo Nothing to do in the pre_build phase...
+     # - aws s3 cp s3://codebuild-p1-orm-output-bucket/p1-orm/target/eorm-1.0.jar ~/.m2/repository/eteam/eorm/1.0/eorm-1.0.jar
+      - aws s3 cp s3://codebuild-p1-orm-output-bucket/p1-orm/target/eorm-1.0.jar /root/ec2-user/eorm-1.0.jar
+      - mvn install:install-file -Dfile=/root/ec2-user/eorm-1.0.jar -DgroupId=eteam -DartifactId=eorm -Dversion=1.0 -Dpackaging=jar
   build:
     commands:
       - echo Build started on `date`
-      - mvn install
+      - mvn package
   post_build:
     commands:
       - echo Build completed on `date`
+      - mkdir artifact
+      - unzip target/p1-webapp-0.9.war -d artifact/
+      - mv artifact/WEB-INF WEB-INF
 artifacts:
+  #This creates an artifact with the following files. This artifact is passed to the next step in the build process.
   files:
-    - target/eorm-1.0.jar
+    - WEB-INF/**/*
+  name: artifact
+#    - p1-webapp-0.9.war
+#    - .ebextensions/**/*
+#eb_codebuild_settings:
+#  CodeBuildServiceRole: arn:aws:iam::727691927255:role/service-role/codebuild-webapp-using-s3-orm-package-service-role
+#  ComputeType: BUILD_GENERAL1_SMALL
+#  Image: aws/codebuild/standard:4.0
+#  Timeout: 60

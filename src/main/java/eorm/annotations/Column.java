@@ -15,6 +15,4 @@ public @interface Column {
     boolean primaryKey() default false;
     boolean nonNull() default false;
     int length() default -1;
-    //String defaultValue() default "";
-
 }

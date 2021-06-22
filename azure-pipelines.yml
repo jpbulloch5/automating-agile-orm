@@ -1,0 +1,48 @@
+# Docker
+# Build and push an image to Docker Hub every time there is a new commit on the dev branch
+
+trigger:
+- dev
+
+variables:
+- group: Keys
+
+resources:
+- repo: self
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Jacob''s Docker Hub'
+    repository: 'jpbulloch5/revature_p1_orm'
+    command: 'build'
+    Dockerfile: 'Dockerfile'
+    tags: |
+      $(Build.BuildId)
+      latest_dev
+    arguments: '--build-arg maven_key=$(maven_key)'
+  displayName: Build ORM in container
+  
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Jacob''s Docker Hub'
+    repository: 'jpbulloch5/revature_p1_orm'
+    command: 'push'
+    tags: |
+      $(Build.BuildId)
+      latest_dev
+  displayName: Push ORM image to DockerHub
+
+- task: ado-discord-webhook@1
+  inputs:
+    channelId: '$(FoH_disord_ID)'
+    webhookKey: '$(FoH_discord_webhook)'
+    name: 'Flock of Hawks --> orm_docker_dev'
+    avatar: 'https://avatarfiles.alphacoders.com/565/thumb-1920-56514.jpg'
+    messageType: 'content'
+    content: '**Build Number:**```$(Build.BuildNumber)```**Build Reason:**```$(Build.Reason)```**Build Status**```$(Agent.JobStatus)```'
+  condition: always()
+  displayName: send message to Discord 
