@@ -5,27 +5,43 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+- group: Keys
+
 steps:
 
-- task: MavenAuthenticate@0
-  inputs:
-    artifactsFeeds: 'Flock-of-Hawks-Artifacts'
-  displayName: Authenticate Flock-of-Hawks-Artifacts with Maven
+# - task: MavenAuthenticate@0
+#   inputs:
+#     artifactsFeeds: 'Flock-of-Hawks-Artifacts'
+#   displayName: Authenticate Flock-of-Hawks-Artifacts with Maven
 
-- task: SonarQubePrepare@4
+- task: SonarCloudPrepare@1
   inputs:
-    SonarQube: 'VM3 SonarQube'
+    SonarCloud: 'SonarCloud'
+    organization: 'isaac-revature-training-uta'
     scannerMode: 'Other'
     extraProperties: |
       # Additional properties that will be passed to the scanner,
       # Put one key=value per line, example:
       # sonar.exclusions=**/*.bin
-      sonar.projectKey=Flock_of_Hawks_team_e_p1_orm
+      sonar.projectKey=revature-training-uta_team_e_p1_orm
+      sonar.projectName=team_e_p1_orm
+
+# - task: SonarQubePrepare@4
+#   inputs:
+#     SonarQube: 'VM3 SonarQube'
+#     scannerMode: 'Other'
+#     extraProperties: |
+#       # Additional properties that will be passed to the scanner,
+#       # Put one key=value per line, example:
+#       # sonar.exclusions=**/*.bin
+#       sonar.projectKey=Flock_of_Hawks_team_e_p1_orm
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    codeCoverageToolOption: 'JaCoCo'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
     mavenVersionOption: 'Default'
@@ -35,11 +51,16 @@ steps:
     sonarQubeRunAnalysis: true
     isJacocoCoverageReportXML: true
     sqMavenPluginVersionChoice: 'latest'
+    checkStyleRunAnalysis: true
+    pmdRunAnalysis: true
+    findBugsRunAnalysis: true
 
-- task: SonarQubePublish@4
+# - task: SonarQubePublish@4
+#   inputs:
+#     pollingTimeoutSec: '300'
+- task: SonarCloudPublish@1
   inputs:
     pollingTimeoutSec: '300'
-
 
 - task: UniversalPackages@0
   inputs:
@@ -54,11 +75,17 @@ steps:
 
 - task: ado-discord-webhook@1
   inputs:
-    channelId: '856747431500447755'
-    webhookKey: 'pnX9mrDlsv86zWC7VMmGQfR9vhvwEGqxWGJjDKyEXltzpPmzwTnC-zz85drbHeZaxw3C'
-    name: 'Flock of Hawks --> test_ORM'
+    channelId: 'FoH_disord_ID'
+    webhookKey: '$(FoH_discord_webhook)'
+    name: '$(System.TeamProject) --> '
     avatar: 'https://avatarfiles.alphacoders.com/565/thumb-1920-56514.jpg'
     messageType: 'content'
-    content: '**Build Number:**```$(Build.BuildNumber)```**Build Reason:**```$(Build.Reason)```**Build Status**```$(Agent.JobStatus)```'
+    content: |
+      __**$(Build.DefinitionName)**__
+      **Build:** $(Build.BuildNumber)
+      **Reason:** $(Build.Reason)
+      **Status:** $(Agent.JobStatus)
+      **Repo:** $(Build.Repository.Uri)
+      **Message:** $(Build.SourceVersionMessage)
   condition: always()
   displayName: send message to Discord 
