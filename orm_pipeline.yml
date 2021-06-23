@@ -1,0 +1,163 @@
+# Builds and deploys the ORM .jar artifact on pushes to dev or main
+
+trigger:
+- main
+- dev
+
+variables:
+- group: Keys
+- name: image_repo
+  value: 'jpbulloch5/revature_p1_orm'
+- name: artifact_result
+  value: 'failed'
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: build
+  jobs:
+  - job: build
+    steps:
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'SonarCloud'
+        organization: 'isaac-revature-training-uta'
+        scannerMode: 'Other'
+        extraProperties: |
+          # Additional properties that will be passed to the scanner,
+          # Put one key=value per line, example:
+          # sonar.exclusions=**/*.bin
+          sonar.projectKey=revature-training-uta_team_e_p1_orm
+          sonar.projectName=team_e_p1_orm
+      displayName: Prepare Analysis --> Task
+    - task: Maven@3
+      inputs:
+        mavenPomFile: 'pom.xml'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        codeCoverageToolOption: 'JaCoCo'
+        codeCoverageClassFilesDirectories: '$(Agent.BuildDirectory)/src/main/java/eorm/annotations,enums,exceptions,scriptors,utils'
+        codeCoverageSourceDirectories: '$(Agent.BuildDirectory)/'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.11'
+        mavenVersionOption: 'Default'
+        mavenOptions: '-Xmx3072m'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: true
+        isJacocoCoverageReportXML: true
+        sqMavenPluginVersionChoice: 'latest'
+        checkStyleRunAnalysis: true
+        pmdRunAnalysis: true
+        findBugsRunAnalysis: true
+      displayName: Package ORM jar file; run analysis --> Task
+    
+    - task: SonarCloudPublish@1
+      inputs:
+        pollingTimeoutSec: '300'  
+      displayName: Publish Analysis to SonarCloud --> Task
+
+    - task: UniversalPackages@0
+      inputs:
+        command: 'publish'
+        publishDirectory: '$(Build.SourcesDirectory)/target/eorm-1.0.jar'
+        feedsToUsePublish: 'internal'
+        vstsFeedPublish: '24909f86-8d03-4826-8947-55d471b47b72/57273a34-95c4-4b34-8b08-4600b3975070'
+        vstsFeedPackagePublish: 'eorm-1.0.jar'
+        versionOption: 'patch'
+        packagePublishDescription: 'eorm-1.0.jar'
+        verbosity: 'Debug'
+        publishedPackageVar: 'orm_artifact_name'
+      displayName: Publish eorm-1.0.jar as a Universal Packages Artifact --> Task
+    
+    variables:
+    - name: artifact_result
+      value: 'succeeded'
+    condition: succeeded()
+
+    displayName: Build and Test ORM --> Job
+  displayName: Build and Test ORM--> Stage
+
+- stage: dockerize
+  dependsOn: []
+  jobs:
+  - job: dockerize
+    steps:
+
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Jacob''s Docker Hub'
+        repository: 'jpbulloch5/revature_p1_orm'
+        command: 'build'
+        Dockerfile: 'Dockerfile'
+        tags: |
+          $(Build.BuildId)
+          latest_dev
+        arguments: '--build-arg maven_key=$(maven_key)'
+      displayName: Build ORM container --> Task
+      
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Jacob''s Docker Hub'
+        repository: $(image_repo)
+        command: 'push'
+        tags: |
+          $(Build.BuildId)
+          latest_dev
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+      displayName: Push dev ORM image to DockerHub --> Task
+
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Jacob''s Docker Hub'
+        repository: $(image_repo)
+        command: 'push'
+        tags: |
+          $(Build.BuildId)
+          latest
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+      displayName: Push main ORM image to DockerHub --> Task
+
+    - task: ado-discord-webhook@1
+      inputs:
+        channelId: '$(discord_id)'
+        webhookKey: '$(discord_webhook)'
+        name: '$(System.TeamProject) --> '
+        avatar: 'https://avatarfiles.alphacoders.com/565/thumb-1920-56514.jpg'
+        messageType: 'content'
+        content: |
+          __**$(Build.DefinitionName)**__
+          **Artifact:** $(orm_artifact_name)
+          **Image:** $(image_repo):$(Build.BuildId)
+          **Branch:** $(Build.SourceBranch)
+          **Build:** $(Build.BuildNumber)
+          **Reason:** $(Build.Reason)
+          **Status:** $(Agent.JobStatus)
+          **Repo:** $(Build.Repository.Uri)
+          **Message:** $(Build.SourceVersionMessage)
+      condition: eq($(artifact_result), 'succeeded')
+      displayName: Publish build details to Discord --> Task
+    - task: ado-discord-webhook@1
+      inputs:
+        channelId: '$(discord_id)'
+        webhookKey: '$(discord_webhook)'
+        name: '$(System.TeamProject) --> '
+        avatar: 'https://avatarfiles.alphacoders.com/565/thumb-1920-56514.jpg'
+        messageType: 'content'
+        content: |
+          __**$(Build.DefinitionName)**__
+          **Artifact:** $(artifact_result)
+          **Image:** $(image_repo):$(Build.BuildId)
+          **Branch:** $(Build.SourceBranch)
+          **Build:** $(Build.BuildNumber)
+          **Reason:** $(Build.Reason)
+          **Status:** $(Agent.JobStatus)
+          **Repo:** $(Build.Repository.Uri)
+          **Message:** $(Build.SourceVersionMessage)
+      condition: ne($(artifact_result), 'succeeded')
+      displayName: Publish build details to Discord --> Task
+
+    displayName: Build and Push ORM Docker image --> Job
+  displayName: Build and Push ORM Docker image --> Stage
+
