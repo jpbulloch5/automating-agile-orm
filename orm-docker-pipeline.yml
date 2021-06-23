@@ -4,8 +4,8 @@
 # triggered by updates to the dev branch
 
 # switching off the trigger for now so that it doesn't take up resources
-# trigger:
-# - main
+trigger:
+- main
 
 resources:
 - repo: self
@@ -24,3 +24,20 @@ steps:
       $(Build.BuildId)
       latest
   displayName: Build ORM in container and push image to DockerHub
+
+- task: ado-discord-webhook@1
+  inputs:
+    channelId: '$(discord_id)'
+    webhookKey: '$(discord_webhook)'
+    name: '$(System.TeamProject) --> '
+    avatar: 'https://avatarfiles.alphacoders.com/565/thumb-1920-56514.jpg'
+    messageType: 'content'
+    content: |
+      __**$(Build.DefinitionName)**__
+      **Build:** $(Build.BuildNumber)
+      **Reason:** $(Build.Reason)
+      **Status:** $(Agent.JobStatus)
+      **Repo:** $(Build.Repository.Uri)
+      **Message:** $(Build.SourceVersionMessage)
+  condition: always()
+  displayName: send message to Discord 
