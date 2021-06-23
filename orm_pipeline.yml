@@ -74,7 +74,7 @@ stages:
       displayName: Certify artifact build was successful --> Variable set
 
     displayName: Build and Test ORM --> Job
-  displayName: Build and Test ORM--> Stage
+  displayName: Build and Test ORM --> Stage
 
 - stage: dockerize
   dependsOn: []
