@@ -1,6 +1,5 @@
 ---
 - hosts: all
-  sudo: yes
   tasks:
     - name: install apt repository
       become: yes
