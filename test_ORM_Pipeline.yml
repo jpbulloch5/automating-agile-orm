@@ -42,6 +42,8 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     codeCoverageToolOption: 'JaCoCo'
+    codeCoverageClassFilesDirectories: '$(Agent.BuildDirectory)/src/main/java/com/revature/airline/controller,dtos,repos,serializers,services,servlets,utils'
+    codeCoverageSourceDirectories: '$(Agent.BuildDirectory)/'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
     mavenVersionOption: 'Default'
@@ -75,8 +77,8 @@ steps:
 
 - task: ado-discord-webhook@1
   inputs:
-    channelId: 'FoH_disord_ID'
-    webhookKey: '$(FoH_discord_webhook)'
+    channelId: '$(discord_id)'
+    webhookKey: '$(discord_webhook)'
     name: '$(System.TeamProject) --> '
     avatar: 'https://avatarfiles.alphacoders.com/565/thumb-1920-56514.jpg'
     messageType: 'content'
