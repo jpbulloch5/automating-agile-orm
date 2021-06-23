@@ -8,8 +8,6 @@ variables:
 - group: Keys
 - name: image_repo
   value: 'jpbulloch5/revature_p1_orm'
-- name: artifact
-  value: 'failed'
 
 pool:
   vmImage: ubuntu-latest
