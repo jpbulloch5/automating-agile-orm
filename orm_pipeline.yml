@@ -145,27 +145,8 @@ stages:
               **Status:** $(Agent.JobStatus)
               **Repo:** $(Build.Repository.Uri)
               **Message:** $(Build.SourceVersionMessage)
-          condition: eq(variables['artifact_result'], 'succeeded')
           displayName: Publish build details to Discord --> Task
-        - task: ado-discord-webhook@1
-          inputs:
-            channelId: '$(discord_id)'
-            webhookKey: '$(discord_webhook)'
-            name: '$(System.TeamProject) --> '
-            avatar: 'https://avatarfiles.alphacoders.com/565/thumb-1920-56514.jpg'
-            messageType: 'content'
-            content: |
-              __**$(Build.DefinitionName)**__
-              **Artifact:** $(artifact_result)
-              **Image:** $(image_repo):$(Build.BuildId)
-              **Branch:** $(Build.SourceBranch)
-              **Build:** $(Build.BuildNumber)
-              **Reason:** $(Build.Reason)
-              **Status:** $(Agent.JobStatus)
-              **Repo:** $(Build.Repository.Uri)
-              **Message:** $(Build.SourceVersionMessage)
-          condition: ne(variables['artifact_result'], 'succeeded')
-          displayName: Publish build details to Discord --> Task
+        
     displayName: Report build results --> Job
   displayName: Report build results --> Stage
 
