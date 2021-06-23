@@ -1,1 +1,15 @@
-#
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+
+- task: Ansible@0
+  inputs:
+    ansibleInterface: 'agentMachine'
+    playbookPathOnAgentMachine: './setup.yml'
+    inventoriesAgentMachine: 'file'
+    inventoryFileOnAgentMachine: './inventory.yml'
+    sudoEnabled: true
