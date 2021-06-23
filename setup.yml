@@ -1,0 +1,51 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+    - name: install apt repository
+      become: yes
+      apt:
+        name: software-properties-common
+        state: latest
+    - name: Add Oracle Java Repository
+      become: yes
+      apt_repository:
+        repo: 'ppa:webupd8team/java'
+    - name: Accept Java 8 Liscense
+      become: yes
+      apt:
+        name: 'oracle-java8-installer'
+        question: 'shared/accepted-oracle-liscense-v1-1'
+        value: 'true'
+        vtype: 'select'
+    - name: Install Oracle Java 8
+      become: yes
+      apt:
+        name: oracle-java8-installer
+        state: latest
+      apt:
+        name: ca-certificates
+        state: latest
+      apt:
+        oracle-java8-set-default
+        state: latest
+    - name: create folder
+      file: 
+        path: /home/dajpearl/tomcat
+        state: directory
+        mode: 0755
+    - name: Download Tomcat
+      get_url: 
+        url: https://archive.apache.org/dist/tomcat/tomcat-8/v8.0.27/bin/apache-tomcat-8.0.27.tar.gz
+        dest: /home/dajpearl/tomcat
+    - name: Extract Archive
+      unarchive: 
+        src: /home/dajpearl/tomcat/apache-tomcat-8.0.27.tar.gz
+        dest: /home/dajpearl/tomcat
+    
+
+
+
+    
+
+
