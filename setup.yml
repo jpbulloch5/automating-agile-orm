@@ -18,14 +18,18 @@
         question: 'shared/accepted-oracle-liscense-v1-1'
         value: 'true'
         vtype: 'select'
-    - name: Install Oracle Java 8
+    - name: oracle-java8-installer
       become: yes
       apt:
         name: oracle-java8-installer
         state: latest
+    - name: ca-certificates
+      become: yes
       apt:
         name: ca-certificates
         state: latest
+    - name: oracle-java8-set-default
+      become: yes
       apt:
         name: oracle-java8-set-default
         state: latest
