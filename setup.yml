@@ -27,7 +27,7 @@
         name: ca-certificates
         state: latest
       apt:
-        oracle-java8-set-default
+        name: oracle-java8-set-default
         state: latest
     - name: create folder
       file: 
