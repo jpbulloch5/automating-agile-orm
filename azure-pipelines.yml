@@ -38,8 +38,8 @@ steps:
 
 - task: ado-discord-webhook@1
   inputs:
-    channelId: 'FoH_disord_ID'
-    webhookKey: '$(FoH_discord_webhook)'
+    channelId: '$(discord_id)'
+    webhookKey: '$(discord_webhook)'
     name: '$(System.TeamProject) --> '
     avatar: 'https://avatarfiles.alphacoders.com/565/thumb-1920-56514.jpg'
     messageType: 'content'
