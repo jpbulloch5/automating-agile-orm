@@ -167,5 +167,6 @@ stages:
               **Message:** $(Build.SourceVersionMessage)
           condition: ne(variables['artifact_result'], 'succeeded')
           displayName: Publish build details to Discord --> Task
-
+    displayName: Report build results --> Job
+  displayName: Report build results --> Stage
 
