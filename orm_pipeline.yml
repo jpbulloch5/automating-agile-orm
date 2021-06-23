@@ -121,6 +121,7 @@ stages:
   jobs:
   - job: report
     steps:
+    - checkout: none
     - task: ado-discord-webhook@1
       inputs:
         channelId: '$(discord_id)'
