@@ -68,10 +68,6 @@ stages:
         verbosity: 'Debug'
         publishedPackageVar: 'orm_artifact_name'
       displayName: Publish eorm-1.0.jar as a Universal Packages Artifact --> Task
-    
-    - bash: echo '##vso[task.setvariable variable=artifact]$(orm_artifact_name)'
-      condition: succeeded()
-      displayName: Certify artifact build was successful --> Variable set
 
     displayName: Build and Test ORM --> Job
   displayName: Build and Test ORM --> Stage
@@ -135,7 +131,6 @@ stages:
             messageType: 'content'
             content: |
               __**$(Build.DefinitionName)**__
-              **Artifact:** $(orm_artifact_name)
               **Image:** $(image_repo):$(Build.BuildId)
               **Branch:** $(Build.SourceBranch)
               **Build:** $(Build.BuildNumber)
