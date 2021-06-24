@@ -8,10 +8,6 @@
     apt:
         name: [ 'postgresql', 'postgresql-contrib' ]
         state: latest
-  
-  - name: Become postgres user
-    become: yes
-    command: sudo su - postgres
 
   - name: Set postgres password
     become: yes
