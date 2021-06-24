@@ -6,11 +6,8 @@
   - name: Ensure PostgreSQL is present
     become: yes
     apt:
-        name: "{{ item }}"
+        name: [ 'postgresql', 'postgresql-contrib' ]
         state: latest
-    with_items:
-     - postgresql
-     - postgresql-contrib
   
   - name: Become postgres user
     become: yes
