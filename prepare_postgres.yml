@@ -3,7 +3,7 @@
   hosts: all
   tasks:
 
-  - name: Ensure JRE 8 is present
+  - name: Ensure PostgreSQL is present
     become: yes
     apt:
         name: {{ items }}
