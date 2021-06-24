@@ -3,7 +3,7 @@ parameters:
   type: string
 - name: sonar_key     #'revature-training-uta_team_e_p1_webapp'
   type: string
-- name: sonar_project #team_e_p1_webapp
+- name: sonar_project #'team_e_p1_webapp'
   type: string
 - name: classes_dir   #'src/main/java/com/revature/airline/controller,dtos,repos,serializers,services,servlets,utils'
   type: string
