@@ -6,7 +6,7 @@
   - name: Ensure PostgreSQL is present
     become: yes
     apt:
-        name: {{ items }}
+        name: "{{ items }}"
         state: latest
     with_items:
      - postgresql
