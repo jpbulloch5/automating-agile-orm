@@ -4,6 +4,7 @@
   tasks:
   - name: Ensure JRE 8 is present
     package:
+        become: yes
         name: openjdk-8-jre-headless
         state: present
   - name: Create ~/tomcat directory if needed
