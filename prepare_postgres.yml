@@ -16,5 +16,9 @@
       chdir: /home
       cmd: psql -U postgres -d postgres -a -f airline_db.sql
 
-  
-
+  - name: Alias 'airline_db' as localhost
+    become: yes
+    become_user: root
+    command:
+      chdir: /etc
+      cmd: grep -qxF '172.0.0.1 airline_db' hosts || echo '172.0.0.1 airline_db' >> hosts
