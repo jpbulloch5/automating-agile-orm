@@ -11,3 +11,27 @@
     with_items:
      - postgresql
      - postgresql-contrib
+  
+  - name: Become postgres user
+    become: yes
+    command: sudo su - postgres
+
+  - name: Set postgres password
+    command:
+      chdir: /home
+      cmd: psql -U postgres -d postgres -a -f password.sql
+
+  - name: Create airline_db database
+    command: 
+      cmd: createdb -e -h localhost -p 5432 -U postgres airline_db
+      stin: password123
+    
+  - name: Create and initialize airline_db
+    command:
+      chdir: /home
+      cmd: psql -U postgres -d postgres -a -f airline_db.sql
+
+  - name: Stop being postgres user
+    command: exit
+  
+
