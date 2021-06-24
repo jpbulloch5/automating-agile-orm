@@ -12,7 +12,7 @@
         repo: 'ppa:webupd8team/java'
     - name: Accept Java 8 Liscense
       become: yes
-      apt:
+      debconf:
         name: 'oracle-java8-installer'
         question: 'shared/accepted-oracle-liscense-v1-1'
         value: 'true'
