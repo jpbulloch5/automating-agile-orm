@@ -20,6 +20,7 @@
     - name: oracle-java8-installer
       become: yes
       apt:
+        update_cache: yes
         name: oracle-java8-installer
         state: latest
     - name: ca-certificates
