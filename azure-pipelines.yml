@@ -18,3 +18,7 @@ steps:
     inventoriesAgentMachine: 'file'
     inventoryFileOnAgentMachine: './inventory'
     sudoEnabled: true
+    args: >-
+      --extra-vars "
+      ansible_python_interpreter=python3
+      deprecation_warnings=True"
