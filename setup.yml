@@ -45,10 +45,4 @@
       unarchive: 
         src: /home/dajpearl/tomcat/apache-tomcat-8.0.27.tar.gz
         dest: /home/dajpearl/tomcat
-    
-
-
-
-    
-
-
+ 
