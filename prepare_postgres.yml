@@ -21,4 +21,4 @@
     become_user: root
     command:
       chdir: /etc
-      cmd: grep -qxF '172.0.0.1 airline_db' hosts || echo '172.0.0.1 airline_db' >> hosts
+      cmd: sudo grep -qxF '172.0.0.1 airline_db' hosts || echo '172.0.0.1 airline_db' >> hosts
