@@ -9,16 +9,21 @@
         state: present
   - name: Create ~/tomcat directory if needed
     file:
-        path: ~/tomcat
+        path: /home/azurruser/tomcat
         state: directory
+  - name: remove bad directory
+    become: yes
+    file:
+        path: ~/tomcat
+        state: absent
   - name: download Tomcat
     get_url:
         url: http://mirrors.estointernet.in/apache/tomcat/tomcat-8/v8.5.68/bin/apache-tomcat-8.5.68.tar.gz
-        dest: ~/tomcat
+        dest: /home/azurruser/tomcat
   - name: install Tomcat
     unarchive:
-        src: ~/tomcat/apache-tomcat-8.5.68.tar.gz
-        dest: ~/tomcat
+        src: /home/azurruser/tomcat/apache-tomcat-8.5.68.tar.gz
+        dest: /home/azurruser/tomcat
         remote_src: yes
   - name: start tomcat service
-    shell: nohup ~/tomcat/apache-tomcat-8.5.68/bin/startup.sh
+    shell: nohup /home/azurruser/tomcat/apache-tomcat-8.5.68/bin/startup.sh
