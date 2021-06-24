@@ -87,7 +87,20 @@ stages:
         tags: |
           $(Build.BuildId)
           latest_dev
-      displayName: Build ORM container --> Task
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+      displayName: Build dev ORM container --> Task
+
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Jacob''s Docker Hub'
+        repository: $(image_repo)
+        command: 'build'
+        Dockerfile: 'Dockerfile'
+        tags: |
+          $(Build.BuildId)
+          latest_dev
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+      displayName: Build main ORM container --> Task
       
     - task: Docker@2
       inputs:
