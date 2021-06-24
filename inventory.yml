@@ -5,6 +5,6 @@ all:
         Azure-VM:
           ansible_host: 20.150.209.143
       vars:
-        ansible_ssh_private_key_file: Flock-of-Hawks-2_key
+        ansible_ssh_private_key_file: Flock-of-Hawks-2_key.pem
         ansible_user: dajpearl
         ansible_python_interpreter: /usr/bin/python3
