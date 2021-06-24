@@ -98,7 +98,7 @@ stages:
         Dockerfile: 'Dockerfile'
         tags: |
           $(Build.BuildId)
-          latest_dev
+          latest
       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
       displayName: Build main ORM container --> Task
       
