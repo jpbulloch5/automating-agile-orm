@@ -21,7 +21,9 @@
     become_user: postgres
     command:
       cmd: createdb -e -h localhost -p 5432 -U postgres airline_db
-      stdin: password123
+      stdin: 
+      - password123
+      - exit
     
   - name: Create and initialize airline_db
     become: yes
