@@ -11,5 +11,5 @@ steps:
     ansibleInterface: 'agentMachine'
     playbookPathOnAgentMachine: './setup.yml'
     inventoriesAgentMachine: 'file'
-    inventoryFileOnAgentMachine: './inventory.yml'
+    inventoryFileOnAgentMachine: './inventory'
     sudoEnabled: true
