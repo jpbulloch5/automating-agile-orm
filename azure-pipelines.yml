@@ -12,7 +12,7 @@ steps:
 - task: Ansible@0
   inputs:
     ansibleInterface: 'agentMachine'
-    playbookPathOnAgentMachine: './setup.yml'
+    playbookPathOnAgentMachine: './prepare_tomcat.yml'
     inventoriesAgentMachine: 'file'
     inventoryFileOnAgentMachine: './inventory'
     sudoEnabled: true
