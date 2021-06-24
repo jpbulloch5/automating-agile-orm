@@ -69,4 +69,18 @@ steps:
       sudo nohup /home/azureuser/tomcat/apache-tomcat-8.5.68/bin/startup.sh
     readyTimeout: '20000'
   displayName: Restart Tomcat
-  
+
+- task: ado-discord-webhook@1
+  inputs:
+    channelId: '856747431500447755'
+    webhookKey: 'pnX9mrDlsv86zWC7VMmGQfR9vhvwEGqxWGJjDKyEXltzpPmzwTnC-zz85drbHeZaxw3C'
+    name: '$(System.TeamProject) -->'
+    avatar: 'https://avatarfiles.alphacoders.com/565/thumb-1920-56514.jpg'
+    messageType: 'content'
+    content: |
+      __**$(Build.DefinitionName)**__
+      **Branch:** $(Build.SourceBranch)
+      **Build:** $(Build.BuildNumber)
+      **Reason:** $(Build.Reason)
+      **Status:** $(Agent.JobStatus)
+      **Message:** $(Build.SourceVersionMessage)
