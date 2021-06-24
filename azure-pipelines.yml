@@ -5,7 +5,10 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-
+- task: InstallSSHKey@0
+  inputs:
+    knownHostsEntry: '20.150.209.143 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGbr1M7nadLbuGXmJqEagWz0B5mDQvKuZDzM9ODE0b3M'
+    sshKeySecureFile: 'Flock-of-Hawks-2_key'
 - task: Ansible@0
   inputs:
     ansibleInterface: 'agentMachine'
