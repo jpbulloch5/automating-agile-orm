@@ -1,0 +1,93 @@
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+- group: Keys
+
+steps:
+
+# - task: MavenAuthenticate@0
+#   inputs:
+#     artifactsFeeds: 'Flock-of-Hawks-Artifacts'
+#   displayName: Authenticate Flock-of-Hawks-Artifacts with Maven
+
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloud'
+    organization: 'isaac-revature-training-uta'
+    scannerMode: 'Other'
+    extraProperties: |
+      # Additional properties that will be passed to the scanner,
+      # Put one key=value per line, example:
+      # sonar.exclusions=**/*.bin
+      sonar.projectKey=revature-training-uta_team_e_p1_orm
+      sonar.projectName=team_e_p1_orm
+
+# - task: SonarQubePrepare@4
+#   inputs:
+#     SonarQube: 'VM3 SonarQube'
+#     scannerMode: 'Other'
+#     extraProperties: |
+#       # Additional properties that will be passed to the scanner,
+#       # Put one key=value per line, example:
+#       # sonar.exclusions=**/*.bin
+#       sonar.projectKey=Flock_of_Hawks_team_e_p1_orm
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    codeCoverageToolOption: 'JaCoCo'
+    codeCoverageClassFilesDirectories: '$(Agent.BuildDirectory)/src/main/java/com/revature/airline/controller,dtos,repos,serializers,services,servlets,utils'
+    codeCoverageSourceDirectories: '$(Agent.BuildDirectory)/'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    mavenVersionOption: 'Default'
+    mavenOptions: '-Xmx3072m'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: true
+    isJacocoCoverageReportXML: true
+    sqMavenPluginVersionChoice: 'latest'
+    checkStyleRunAnalysis: true
+    pmdRunAnalysis: true
+    findBugsRunAnalysis: true
+
+# - task: SonarQubePublish@4
+#   inputs:
+#     pollingTimeoutSec: '300'
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
+
+- task: UniversalPackages@0
+  inputs:
+    command: 'publish'
+    publishDirectory: '$(Build.SourcesDirectory)/target/eorm-1.0.jar'
+    feedsToUsePublish: 'internal'
+    vstsFeedPublish: '24909f86-8d03-4826-8947-55d471b47b72/57273a34-95c4-4b34-8b08-4600b3975070'
+    vstsFeedPackagePublish: 'eorm-1.0.jar'
+    versionOption: 'patch'
+    packagePublishDescription: 'eorm-1.0.jar'
+    verbosity: 'Debug'
+
+- task: ado-discord-webhook@1
+  inputs:
+    channelId: '$(discord_id)'
+    webhookKey: '$(discord_webhook)'
+    name: '$(System.TeamProject) --> '
+    avatar: 'https://avatarfiles.alphacoders.com/565/thumb-1920-56514.jpg'
+    messageType: 'content'
+    content: |
+      __**$(Build.DefinitionName)**__
+      **Build:** $(Build.BuildNumber)
+      **Reason:** $(Build.Reason)
+      **Status:** $(Agent.JobStatus)
+      **Repo:** $(Build.Repository.Uri)
+      **Message:** $(Build.SourceVersionMessage)
+  condition: always()
+  displayName: send message to Discord 
