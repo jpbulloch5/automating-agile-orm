@@ -38,7 +38,7 @@ stages:
         codeCoverageClassFilesDirectories: '$(Agent.BuildDirectory)/src/main/java/eorm/annotations,enums,exceptions,scriptors,utils'
         codeCoverageSourceDirectories: '$(Agent.BuildDirectory)/'
         javaHomeOption: 'JDKVersion'
-        jdkVersionOption: '1.11'
+        jdkVersionOption: '1.8'
         mavenVersionOption: 'Default'
         mavenOptions: '-Xmx3072m'
         mavenAuthenticateFeed: false
@@ -49,8 +49,6 @@ stages:
         checkStyleRunAnalysis: true
         pmdRunAnalysis: true
         findBugsRunAnalysis: true
-      displayName: Package ORM jar file; run analysis --> Task
-    
     - task: SonarCloudPublish@1
       inputs:
         pollingTimeoutSec: '300'  
