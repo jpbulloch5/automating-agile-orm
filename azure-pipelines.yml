@@ -51,6 +51,15 @@ steps:
     readyTimeout: '20000'
   displayName: Rename p1-webapp-0.9.war to webapp
 
+- task: Ansible@0
+  inputs:
+    ansibleInterface: 'agentMachine'
+    playbookPathOnAgentMachine: 'prepare_postgres.yml'
+    inventoriesAgentMachine: 'file'
+    inventoryFileOnAgentMachine: './inventory'
+    args: '--extra-vars " ansible_python_interpreter=python3 deprecation_warnings=True"'
+  displayName: Setup airline_db in postgres
+  
 - task: SSH@0
   inputs:
     sshEndpoint: 'FOHVM2'
@@ -60,3 +69,4 @@ steps:
       sudo nohup /home/azureuser/tomcat/apache-tomcat-8.5.68/bin/startup.sh
     readyTimeout: '20000'
   displayName: Restart Tomcat
+  
