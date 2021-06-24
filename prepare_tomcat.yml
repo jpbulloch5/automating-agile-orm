@@ -2,28 +2,28 @@
 - name:
   hosts: all
   tasks:
+
   - name: Ensure JRE 8 is present
     become: yes
     package:
         name: openjdk-8-jre-headless
         state: present
+
   - name: Create /home/azureuser/tomcat directory if needed
     file:
         path: /home/azureuser/tomcat
         state: directory
-  - name: remove bad directory
-    become: yes
-    file:
-        path: /home/azurruser/tomcat/tomcat
-        state: absent
+
   - name: download Tomcat
     get_url:
         url: http://mirrors.estointernet.in/apache/tomcat/tomcat-8/v8.5.68/bin/apache-tomcat-8.5.68.tar.gz
         dest: /home/azureuser/tomcat
+
   - name: install Tomcat
     unarchive:
         src: /home/azureuser/tomcat/apache-tomcat-8.5.68.tar.gz
         dest: /home/azureuser/tomcat
         remote_src: yes
+        
   - name: start tomcat service
     shell: nohup /home/azureuser/tomcat/apache-tomcat-8.5.68/bin/startup.sh
