@@ -39,7 +39,7 @@ steps:
     sshEndpoint: 'FOHVM2'
     sourceFolder: '$(Build.ArtifactStagingDirectory)'
     contents: '**'
-    targetFolder: '/home/azureuser/tomcat/apache-tomcat-8.5.68/webapps'
+    targetFolder: '/home/azureuser'
     readyTimeout: '20000'
   displayName: Send p1-webapp-0.9.war to Tomcat
 
@@ -47,7 +47,7 @@ steps:
   inputs:
     sshEndpoint: 'FOHVM2'
     runOptions: 'commands'
-    commands: 'mv /home/azureuser/tomcat/apache-tomcat-8.5.68/webapps/p1-webapp-0.9.war  /home/azureuser/tomcat/apache-tomcat-8.5.68/webapps/webapp.war'
+    commands: 'mv /home/azureuser/p1-webapp-0.9.war  /home/azureuser/tomcat/apache-tomcat-8.5.68/webapps/webapp.war'
     readyTimeout: '20000'
   displayName: Rename p1-webapp-0.9.war to webapp
 
