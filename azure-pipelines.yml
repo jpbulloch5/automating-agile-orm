@@ -56,7 +56,7 @@ steps:
     sshEndpoint: 'FOHVM2'
     runOptions: 'commands'
     commands: |
-      nohup /home/azureuser/tomcat/apache-tomcat-8.5.68/bin/shutdown.sh
-      nohup /home/azureuser/tomcat/apache-tomcat-8.5.68/bin/startup.sh
+      sudo nohup /home/azureuser/tomcat/apache-tomcat-8.5.68/bin/shutdown.sh
+      sudo nohup /home/azureuser/tomcat/apache-tomcat-8.5.68/bin/startup.sh
     readyTimeout: '20000'
   displayName: Restart Tomcat
