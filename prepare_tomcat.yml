@@ -1,0 +1,23 @@
+---
+- name:
+  hosts: all
+  tasks:
+  - name: Ensure JRE 8 is present
+    package:
+        name: openjdk-8-jre-headless
+        state: present
+  - name: Create ~/tomcat directory if needed
+    file:
+        path: ~/tomcat
+        state: directory
+  - name: download Tomcat
+    get_url:
+        url: http://mirrors.estointernet.in/apache/tomcat/tomcat-8/v8.5.68/bin/apache-tomcat-8.5.68.tar.gz
+        dest: ~/tomcat
+  - name: install Tomcat
+    unarchive:
+        src: ~/tomcat/apache-tomcat-8.5.68.tar.gz
+        dest: ~/tomcat
+        remote_src: yes
+  - name: start tomcat service
+    shell: nohup ~/tomcat/apache-tomcat-8.5.68/bin/startup.sh
