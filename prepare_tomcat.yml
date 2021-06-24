@@ -24,6 +24,3 @@
         src: /home/azureuser/tomcat/apache-tomcat-8.5.68.tar.gz
         dest: /home/azureuser/tomcat
         remote_src: yes
-        
-  - name: start tomcat service
-    shell: nohup /home/azureuser/tomcat/apache-tomcat-8.5.68/bin/startup.sh

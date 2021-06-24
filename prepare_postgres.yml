@@ -1,0 +1,13 @@
+---
+- name:
+  hosts: all
+  tasks:
+
+  - name: Ensure JRE 8 is present
+    become: yes
+    apt:
+        name: {{ items }}
+        state: latest
+    with_items:
+     - postgresql
+     - postgresql-contrib
