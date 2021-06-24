@@ -12,7 +12,7 @@
         repo: 'ppa:webupd8team/java'
     - name: Accept Java 8 Liscense
       become: yes
-      apt:
+      debconf:
         name: 'oracle-java8-installer'
         question: 'shared/accepted-oracle-liscense-v1-1'
         value: 'true'
@@ -21,7 +21,7 @@
       become: yes
       apt:
         name: oracle-java8-installer
-        state: latest
+        update_cache: yes
     - name: ca-certificates
       become: yes
       apt:
@@ -34,21 +34,15 @@
         state: latest
     - name: create folder
       file: 
-        path: /home/dajpearl/tomcat
+        path: /home/azureuser/tomcat
         state: directory
         mode: 0755
     - name: Download Tomcat
       get_url: 
         url: https://archive.apache.org/dist/tomcat/tomcat-8/v8.0.27/bin/apache-tomcat-8.0.27.tar.gz
-        dest: /home/dajpearl/tomcat
+        dest: /home/azureuser/tomcat
     - name: Extract Archive
       unarchive: 
-        src: /home/dajpearl/tomcat/apache-tomcat-8.0.27.tar.gz
-        dest: /home/dajpearl/tomcat
-    
-
-
-
-    
-
-
+        src: /home/azureuser/tomcat/apache-tomcat-8.0.27.tar.gz
+        dest: /home/azureuser/tomcat
+ 

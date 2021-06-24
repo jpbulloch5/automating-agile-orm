@@ -1,15 +1,86 @@
-trigger:
-- main
+# Docker
 
-pool:
-  vmImage: ubuntu-latest
+# Build and push an image to Docker Hub every time there is a new commit on the dev branch
+
+trigger:
+ - dev 
 
 steps:
+
+- task: InstallSSHKey@0
+  inputs:
+    knownHostsEntry: '20.150.209.143 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGbr1M7nadLbuGXmJqEagWz0B5mDQvKuZDzM9ODE0b3M'
+    sshKeySecureFile: 'Flock-of-Hawks-2_key.pem'
+  displayName: Connect SSH
+- task: Ansible@0
+  inputs:
+    ansibleInterface: 'agentMachine'
+    playbookPathOnAgentMachine: './prepare_tomcat.yml'
+    inventoriesAgentMachine: 'file'
+    inventoryFileOnAgentMachine: './inventory'
+    sudoEnabled: true
+    args: >-
+      --extra-vars "
+      ansible_python_interpreter=python3
+      deprecation_warnings=True"
+  displayName: Start Tomcat
+- task: DownloadPackage@1
+  inputs:
+    packageType: 'upack'
+    feed: '24909f86-8d03-4826-8947-55d471b47b72/57273a34-95c4-4b34-8b08-4600b3975070'
+    view: '0e40193e-51ba-4fbb-be33-a0ccaf96175c'
+    definition: 'a58f4c1d-c61c-43d2-b57b-b4c1206e3e6b'
+    version: '*'
+    downloadPath: '$(Build.ArtifactStagingDirectory)'
+  displayName: Load p1-webapp-0.9.war from Artifacts
+
+- task: CopyFilesOverSSH@0
+  inputs:
+    sshEndpoint: 'FOHVM2'
+    sourceFolder: '$(Build.ArtifactStagingDirectory)'
+    contents: '**'
+    targetFolder: '/home/azureuser'
+    readyTimeout: '20000'
+  displayName: Send p1-webapp-0.9.war to Tomcat
+
+- task: SSH@0
+  inputs:
+    sshEndpoint: 'FOHVM2'
+    runOptions: 'commands'
+    commands: 'sudo mv /home/azureuser/p1-webapp-0.9.war  /home/azureuser/tomcat/apache-tomcat-8.5.68/webapps/webapp.war'
+    readyTimeout: '20000'
+  displayName: Rename p1-webapp-0.9.war to webapp
 
 - task: Ansible@0
   inputs:
     ansibleInterface: 'agentMachine'
-    playbookPathOnAgentMachine: './setup.yml'
+    playbookPathOnAgentMachine: 'prepare_postgres.yml'
     inventoriesAgentMachine: 'file'
-    inventoryFileOnAgentMachine: './inventory.yml'
-    sudoEnabled: true
+    inventoryFileOnAgentMachine: './inventory'
+    args: '--extra-vars " ansible_python_interpreter=python3 deprecation_warnings=True"'
+  displayName: Setup airline_db in postgres
+  
+- task: SSH@0
+  inputs:
+    sshEndpoint: 'FOHVM2'
+    runOptions: 'commands'
+    commands: |
+      sudo nohup /home/azureuser/tomcat/apache-tomcat-8.5.68/bin/shutdown.sh
+      sudo nohup /home/azureuser/tomcat/apache-tomcat-8.5.68/bin/startup.sh
+    readyTimeout: '20000'
+  displayName: Restart Tomcat
+
+- task: ado-discord-webhook@1
+  inputs:
+    channelId: '856747431500447755'
+    webhookKey: 'pnX9mrDlsv86zWC7VMmGQfR9vhvwEGqxWGJjDKyEXltzpPmzwTnC-zz85drbHeZaxw3C'
+    name: '$(System.TeamProject) -->'
+    avatar: 'https://avatarfiles.alphacoders.com/565/thumb-1920-56514.jpg'
+    messageType: 'content'
+    content: |
+      __**$(Build.DefinitionName)**__
+      **Branch:** $(Build.SourceBranch)
+      **Build:** $(Build.BuildNumber)
+      **Reason:** $(Build.Reason)
+      **Status:** $(Agent.JobStatus)
+      **Message:** $(Build.SourceVersionMessage)

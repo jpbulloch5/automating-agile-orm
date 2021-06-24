@@ -1,0 +1,33 @@
+---
+- name:
+  hosts: all
+  tasks:
+
+  - name: Ensure PostgreSQL is present
+    become: yes
+    apt:
+        name: [ 'postgresql', 'postgresql-contrib' ]
+        state: latest
+    
+  - name: Create and initialize airline_db
+    become: yes
+    become_user: postgres
+    command:
+      chdir: /home
+      cmd: psql -U postgres -d postgres -a -f airline_db.sql
+
+  - name: Alias 'airline_db' as localhost
+    become: yes
+    become_user: root
+    command:
+      chdir: /etc
+      argv:
+      - grep
+      - -qxF
+      - '127.0.0.1 airline_db'
+      - hosts
+      - \|\|
+      - echo
+      - '172.0.0.1 airline_db'
+      - \>\>
+      - hosts
