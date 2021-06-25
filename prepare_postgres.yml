@@ -28,6 +28,6 @@
       - hosts
       - \|\|
       - echo
-      - '172.0.0.1 airline_db'
+      - '127.0.0.1 airline_db'
       - \>\>
       - hosts
